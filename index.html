@@ -1,0 +1,316 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script>
+var currency = 'BTC';
+var zoom = '7d';
+var chart;
+
+$(function() {
+	chart = Highcharts.stockChart('chart', {
+		chart: {
+			events: {
+				load:  function() {
+					chart = this,
+					requestData('7d');
+				}
+			}
+		},
+		
+		rangeSelector: {
+			allButtonsEnabled: true,
+			buttons: [{
+				type: 'day',
+				count: 7,
+				text: '7d',
+				events: {
+					click: function(e) {
+						requestData('7d');
+					}
+				}
+			},
+			{
+				type: 'month',
+				count: 1,
+				text: '1m',
+				events: {
+					click: function(e) {
+						requestData('1m');
+					}
+				}
+			},
+			{
+				type: 'month',
+				count: 3,
+				text: '3m',
+				events: {
+					click: function(e) {
+						requestData('3m');
+					}
+				}
+			},
+			{
+				type: 'month',
+				count: 6,
+				text: '6m',
+				events: {
+					click: function(e) {
+						requestData('6m');
+					}
+				}
+			},
+			{
+				type: 'month',
+				count: 12,
+				text: '1y',
+				events: {
+					click: function(e) {
+						requestData('1y');
+					}
+				}
+			},
+			{
+				type: 'month',
+				count: 24,
+				text: '2y',
+				events: {
+					click: function(e) {
+						requestData('2y');
+					}
+				}
+			},
+			{
+				type: 'ytd',
+				text: 'YTD',
+				events: {
+					click: function(e) {
+						requestData('1y');
+					}
+				}
+			},
+			{
+				type: 'all',
+				text: 'ALL',
+				events: {
+					click: function(e) {
+						requestData('max');
+					}
+				}
+			}],
+			buttonTheme: {
+				width: 60
+			},
+			selected: 0,
+			inputEnabled: false
+		},
+		
+		scrollbar: {
+			enabled: false
+		},
+		
+		navigator: {
+			enabled: false
+		},
+		
+		title: {
+			align: 'left',
+			style: {
+				fontWeight: 'bold'
+			}
+		},
+		
+		yAxis: [{
+			title: {
+				text: 'OHLC'
+			},
+			resize: {
+				enabled: true
+			},
+		},
+		{
+			visible: false
+		}],
+		
+		plotOptions: {
+			series: {
+				softThreshold: true
+			},
+			candlestick: {
+				color: '#d82e2e',
+				lineColor: '#d82e2e',	    		
+				upLineColor: '#4dd82d',
+				upColor: '#4dd82d'
+			}
+		},
+		
+		tooltip: {
+			backgroundColor: {
+				linearGradient: {
+					x1: 0,
+					y1: 0,
+					x2: 0,
+					y2: 1
+				},
+				stops: [
+					[0, 'white'],
+					[1, '#EEE']
+				]
+			},
+			borderColor: 'gray',
+			borderWidth: 1,
+			shared: true,
+			follorPointer: true,
+			formatter: function () {
+				var s;
+				s = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', new Date(this.x)) + "<br/>";
+				s += "<b>Open:</b> " + this.points[1].point.open + "<br/>";
+				s += "<b>High:</b> " + this.points[1].point.high + "<br/>";
+				s += "<b>Low:</b> " + this.points[1].point.low + "<br/>";
+				s += "<b>Close:</b> " + this.points[1].point.close + "<br/>";
+				s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
+				s += "<b>Volume:</b> " + Math.floor(this.points[0].y) + "<br/>";
+				return s;
+			}
+		},
+		
+		series: [{
+			type: 'column',
+			name: 'Volume',
+			yAxis: 1,
+			dataGrouping: {
+				enabled: false
+			}
+		},
+		{
+			type: 'candlestick',
+			name: 'OHLC',
+			yAxis: 0,
+			dataGrouping: {
+				enabled: false
+			}
+		}],
+		
+		exporting: {
+			buttons: {
+				contextButton: {
+					enabled: false
+				},
+				fullScreenButton: {
+					text: 'Full screen',
+					onclick: function () {
+						$('#container').toggleClass('modal');
+						$('#chart').highcharts().reflow();
+					}
+				},
+				logarithmicScaleButton: {
+					text: 'Logarithmic scale',
+					onclick: function () {
+						$('#chart').highcharts().yAxis[0].update({ type: 'logarithmic'});
+					}
+				},
+				linearScaleButton: {
+					text: 'Linear scale',
+					onclick: function () {
+						$('#chart').highcharts().yAxis[0].update({ type: 'linear'});
+					}
+				},
+			}
+		},
+		
+		credits: {
+			enabled: false
+		}
+	});
+});
+
+
+function requestData(z) {
+	zoom = z;
+	var url;
+	if(z == '7d') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=USD&limit=84&aggregate=2'; }
+	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=USD&limit=90&aggregate=8'; }
+	if(z == '3m') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=90&aggregate=1'; }
+	if(z == '6m') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=90&aggregate=2'; }
+	if(z == '1y') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=90&aggregate=4'; }
+	if(z == '2y') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=90&aggregate=8'; }
+	if(z == 'max') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=2000'; }
+	console.log(url);
+	$.getJSON(url, function(data) {
+		data = data['Data'];
+		// split the data set into ohlc and volume
+		var ohlc = [],
+			volume = [],
+			dataLength = data.length;
+		
+		for (i = 0; i < dataLength; i++) {
+			if(data[i]['low'] > 0 && data[i]['volumeto'] > 0) {
+				ohlc.push([
+					data[i]['time'] * 1000, // the date
+					data[i]['open'], // open
+					data[i]['high'], // high
+					data[i]['low'], // low
+					data[i]['close'] // close
+				]);
+				
+				volume.push([
+					data[i]['time'] * 1000, // the date
+					data[i]['volumeto'] // the volume
+				]);
+			}
+		}
+		chart.setTitle({text: currency + '/USD'});
+		chart.series[1].setData(ohlc, false);
+		chart.series[0].setData(volume, false);
+		chart.redraw();
+	});
+}
+
+function changeCurrency(c) {
+	currency = c;
+	requestData(zoom);
+}
+</script>
+<style>
+.chart {
+    width: 950px;
+    height: 500px;
+	margin: auto;
+}
+
+.modal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
+.modal .chart {
+    height: 100%;
+	width: 100%;
+}
+</style>
+</head>
+<body>
+Currency: 
+<a href="#" onclick="changeCurrency('BTC');">BTC</a>
+<a href="#" onclick="changeCurrency('BCH');">BCH</a>
+<a href="#" onclick="changeCurrency('ETH');">ETH</a>
+<a href="#" onclick="changeCurrency('LTC');">LTC</a>
+<a href="#" onclick="changeCurrency('XMR');">XMR</a>
+<a href="#" onclick="changeCurrency('NMC');">NMC</a>
+<a href="#" onclick="changeCurrency('AEON');">AEON</a>
+<br />
+<!-- Base Currency: 
+<a href="#" onclick="changeBaseCurrency('BTC');">BTC</a>
+<a href="#" onclick="changeBaseCurrency('USD');">USD</a>
+<a href="#" onclick="changeBaseCurrency('EUR');">EUR</a> -->
+
+<div id="container">
+	<div id="chart" class="chart"></div>
+</div>
+
+</body>
+</html>

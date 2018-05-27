@@ -6,7 +6,7 @@
 <script>
 var currency = 'BTC';
 var baseCurrency = 'USD';
-var zoom = '7d';
+var zoom = '1m';
 var chart;
 
 $(function() {
@@ -15,7 +15,7 @@ $(function() {
 			events: {
 				load:  function() {
 					chart = this,
-					requestData('7d');
+					requestData('1m');
 				}
 			}
 		},
@@ -23,18 +23,6 @@ $(function() {
 		rangeSelector: {
 			allButtonsEnabled: true,
 			buttons: [{
-				type: 'day',
-				count: 7,
-				text: '7d',
-				events: {
-					click: function(e) {
-						requestData('7d');
-					}
-				}
-			},
-			{
-				type: 'month',
-				count: 1,
 				text: '1m',
 				events: {
 					click: function(e) {
@@ -43,60 +31,66 @@ $(function() {
 				}
 			},
 			{
-				type: 'month',
-				count: 3,
-				text: '3m',
+				text: '5m',
 				events: {
 					click: function(e) {
-						requestData('3m');
+						requestData('5m');
 					}
 				}
 			},
 			{
-				type: 'month',
-				count: 6,
-				text: '6m',
+				text: '10m',
 				events: {
 					click: function(e) {
-						requestData('6m');
+						requestData('10m');
 					}
 				}
 			},
 			{
-				type: 'month',
-				count: 12,
-				text: '1y',
+				text: '1h',
 				events: {
 					click: function(e) {
-						requestData('1y');
+						requestData('1h');
 					}
 				}
 			},
 			{
-				type: 'month',
-				count: 24,
-				text: '2y',
+				text: '5h',
 				events: {
 					click: function(e) {
-						requestData('2y');
+						requestData('5h');
 					}
 				}
 			},
 			{
-				type: 'ytd',
-				text: 'YTD',
+				text: '10h',
 				events: {
 					click: function(e) {
-						requestData('1y');
+						requestData('10h');
 					}
 				}
 			},
 			{
-				type: 'all',
-				text: 'ALL',
+				text: '1d',
 				events: {
 					click: function(e) {
-						requestData('max');
+						requestData('1d');
+					}
+				}
+			},
+			{
+				text: '3d',
+				events: {
+					click: function(e) {
+						requestData('3d');
+					}
+				}
+			},
+			{
+				text: '1w',
+				events: {
+					click: function(e) {
+						requestData('1w');
 					}
 				}
 			}],
@@ -230,14 +224,15 @@ $(function() {
 function requestData(z) {
 	zoom = z;
 	var url;
-	if(z == '7d') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=84&aggregate=2'; }
-	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=8'; }
-	if(z == '3m') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=1'; }
-	if(z == '6m') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=2'; }
-	if(z == '1y') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=4'; }
-	if(z == '2y') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=8'; }
-	if(z == 'max') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=2000'; }
-	console.log(url);
+	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=1'; }
+	if(z == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=5'; }
+	if(z == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=10'; }
+	if(z == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=1'; }
+	if(z == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=5'; }
+	if(z == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=10'; }
+	if(z == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=1'; }
+	if(z == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=3'; }
+	if(z == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=7'; }
 	$.getJSON(url, function(data) {
 		data = data['Data'];
 		// split the data set into ohlc and volume
@@ -248,7 +243,7 @@ function requestData(z) {
 		for (i = 0; i < dataLength; i++) {
 			if(data[i]['low'] > 0) {
 				ohlc.push([
-					data[i]['time'] * 1000, // the date
+					data[i]['time'] * 1000, // timestamp in milliseconds
 					data[i]['open'], // open
 					data[i]['high'], // high
 					data[i]['low'], // low
@@ -256,11 +251,12 @@ function requestData(z) {
 				]);
 				
 				volume.push([
-					data[i]['time'] * 1000, // the date
-					data[i]['volumeto'] // the volume
+					data[i]['time'] * 1000, // timestamp in milliseconds
+					data[i]['volumeto'] // volume
 				]);
 			}
 		}
+		chart.xAxis[0].setExtremes();
 		chart.setTitle({text: currency + '/' + baseCurrency});
 		chart.series[1].setData(ohlc, false);
 		chart.series[0].setData(volume, false);

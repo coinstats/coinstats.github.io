@@ -261,6 +261,7 @@ function requestData(z) {
 				]);
 			}
 		}
+		chart.xAxis[0].setExtremes();
 		chart.setTitle({text: currency + '/' + baseCurrency});
 		chart.series[1].setData(ohlc, false);
 		chart.series[0].setData(volume, false);

@@ -5,6 +5,7 @@
 <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 <script>
 var currency = 'BTC';
+var baseCurrency = 'USD';
 var zoom = '7d';
 var chart;
 
@@ -229,13 +230,13 @@ $(function() {
 function requestData(z) {
 	zoom = z;
 	var url;
-	if(z == '7d') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=USD&limit=84&aggregate=2'; }
-	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=USD&limit=90&aggregate=8'; }
-	if(z == '3m') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=90&aggregate=1'; }
-	if(z == '6m') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=90&aggregate=2'; }
-	if(z == '1y') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=90&aggregate=4'; }
-	if(z == '2y') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=90&aggregate=8'; }
-	if(z == 'max') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=USD&limit=2000'; }
+	if(z == '7d') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=84&aggregate=2'; }
+	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=8'; }
+	if(z == '3m') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=1'; }
+	if(z == '6m') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=2'; }
+	if(z == '1y') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=4'; }
+	if(z == '2y') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=90&aggregate=8'; }
+	if(z == 'max') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=2000'; }
 	console.log(url);
 	$.getJSON(url, function(data) {
 		data = data['Data'];
@@ -260,7 +261,7 @@ function requestData(z) {
 				]);
 			}
 		}
-		chart.setTitle({text: currency + '/USD'});
+		chart.setTitle({text: currency + '/' + baseCurrency});
 		chart.series[1].setData(ohlc, false);
 		chart.series[0].setData(volume, false);
 		chart.redraw();
@@ -269,6 +270,11 @@ function requestData(z) {
 
 function changeCurrency(c) {
 	currency = c;
+	requestData(zoom);
+}
+
+function changeBaseCurrency(c) {
+	baseCurrency = c;
 	requestData(zoom);
 }
 </script>
@@ -303,10 +309,10 @@ Currency:
 <a href="#" onclick="changeCurrency('NMC');">NMC</a>
 <a href="#" onclick="changeCurrency('AEON');">AEON</a>
 <br />
-<!-- Base Currency: 
+Base Currency: 
 <a href="#" onclick="changeBaseCurrency('BTC');">BTC</a>
 <a href="#" onclick="changeBaseCurrency('USD');">USD</a>
-<a href="#" onclick="changeBaseCurrency('EUR');">EUR</a> -->
+<a href="#" onclick="changeBaseCurrency('EUR');">EUR</a>
 
 <div id="container">
 	<div id="chart" class="chart"></div>

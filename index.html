@@ -245,7 +245,7 @@ function requestData(z) {
 			dataLength = data.length;
 		
 		for (i = 0; i < dataLength; i++) {
-			if(data[i]['low'] > 0 && data[i]['volumeto'] > 0) {
+			if(data[i]['low'] > 0) {
 				ohlc.push([
 					data[i]['time'] * 1000, // the date
 					data[i]['open'], // open

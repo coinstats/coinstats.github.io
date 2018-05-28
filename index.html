@@ -160,12 +160,13 @@ $(function() {
 			formatter: function () {
 				var s;
 				s = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', new Date(this.x)) + "<br/>";
-				s += "<b>Open:</b> " + this.points[1].point.open + "<br/>";
-				s += "<b>High:</b> " + this.points[1].point.high + "<br/>";
-				s += "<b>Low:</b> " + this.points[1].point.low + "<br/>";
-				s += "<b>Close:</b> " + this.points[1].point.close + "<br/>";
 				s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
-				s += "<b>Volume:</b> " + Math.floor(this.points[0].y) + "<br/>";
+				s += "<b>Open:</b> " + this.points[1].point.open.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+				s += "<b>High:</b> " + this.points[1].point.high.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+				s += "<b>Low:</b> " + this.points[1].point.low.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+				s += "<b>Close:</b> " + this.points[1].point.close.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+				s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
+				s += "<b>Volume:</b> " + this.points[0].y.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
 				return s;
 			}
 		},

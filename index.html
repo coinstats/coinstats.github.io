@@ -35,13 +35,6 @@ $(function() {
 			enabled: false
 		},
 		
-		title: {
-			align: 'left',
-			style: {
-				fontWeight: 'bold'
-			}
-		},
-		
 		yAxis: [{
 			title: {
 				text: 'OHLC'
@@ -161,7 +154,6 @@ function requestData(z) {
 		}
 		chart.yAxis[0].update({type: scale});
 		chart.xAxis[0].setExtremes();
-		chart.setTitle({text: currency + '/' + baseCurrency});
 		chart.series[1].setData(ohlc, false);
 		chart.series[0].setData(volume, false);
 		chart.redraw();

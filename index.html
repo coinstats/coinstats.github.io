@@ -194,7 +194,7 @@ function changeBaseCurrency(c) {
 }
 </script>
 <style>
-.chart {
+.container {
 	width: 85%;
 	margin: auto;
 }
@@ -202,7 +202,7 @@ function changeBaseCurrency(c) {
 </head>
 <body>
 
-<div id="container">
+<div id="container" class="container">
 	Scale: 
 	<a href="#" onclick="changeScale('linear');">linear</a>
 	<a href="#" onclick="changeScale('logarithmic');">logarithmic</a>
@@ -238,7 +238,7 @@ function changeBaseCurrency(c) {
 	<a href="#" onclick="changeBaseCurrency('BTC');">BTC</a>
 	<a href="#" onclick="changeBaseCurrency('USD');">USD</a>
 	<a href="#" onclick="changeBaseCurrency('EUR');">EUR</a>
-	<div id="chart" class="chart"></div>
+	<div id="chart"></div>
 </div>
 
 </body>

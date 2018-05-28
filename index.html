@@ -4,6 +4,7 @@
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 <script>
+var limit = 25;
 var currency = 'BTC';
 var baseCurrency = 'USD';
 var zoom = '1m';
@@ -222,19 +223,18 @@ $(function() {
 	});
 });
 
-
 function requestData(z) {
 	zoom = z;
 	var url;
-	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=1'; }
-	if(z == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=5'; }
-	if(z == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=10'; }
-	if(z == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=1'; }
-	if(z == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=5'; }
-	if(z == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=10'; }
-	if(z == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=1'; }
-	if(z == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=3'; }
-	if(z == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=200&aggregate=7'; }
+	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(z == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
+	if(z == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
+	if(z == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(z == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
+	if(z == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
+	if(z == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(z == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=3'; }
+	if(z == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=7'; }
 	$.getJSON(url, function(data) {
 		data = data['Data'];
 		// split the data set into ohlc and volume
@@ -264,6 +264,11 @@ function requestData(z) {
 		chart.series[0].setData(volume, false);
 		chart.redraw();
 	});
+}
+
+function changeLimit(l) {
+	limit = l;
+	requestData(zoom);
 }
 
 function changeCurrency(c) {
@@ -297,6 +302,13 @@ function changeBaseCurrency(c) {
 </style>
 </head>
 <body>
+Limit: 
+<a href="#" onclick="changeLimit('10');">10</a>
+<a href="#" onclick="changeLimit('25');">25</a>
+<a href="#" onclick="changeLimit('50');">50</a>
+<a href="#" onclick="changeLimit('100');">100</a>
+<a href="#" onclick="changeLimit('200');">200</a>
+<br/>
 Currency: 
 <a href="#" onclick="changeCurrency('BTC');">BTC</a>
 <a href="#" onclick="changeCurrency('BCH');">BCH</a>

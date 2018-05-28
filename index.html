@@ -23,84 +23,7 @@ $(function() {
 		},
 		
 		rangeSelector: {
-			allButtonsEnabled: true,
-			buttons: [{
-				text: '1m',
-				events: {
-					click: function(e) {
-						requestData('1m');
-					}
-				}
-			},
-			{
-				text: '5m',
-				events: {
-					click: function(e) {
-						requestData('5m');
-					}
-				}
-			},
-			{
-				text: '10m',
-				events: {
-					click: function(e) {
-						requestData('10m');
-					}
-				}
-			},
-			{
-				text: '1h',
-				events: {
-					click: function(e) {
-						requestData('1h');
-					}
-				}
-			},
-			{
-				text: '5h',
-				events: {
-					click: function(e) {
-						requestData('5h');
-					}
-				}
-			},
-			{
-				text: '10h',
-				events: {
-					click: function(e) {
-						requestData('10h');
-					}
-				}
-			},
-			{
-				text: '1d',
-				events: {
-					click: function(e) {
-						requestData('1d');
-					}
-				}
-			},
-			{
-				text: '3d',
-				events: {
-					click: function(e) {
-						requestData('3d');
-					}
-				}
-			},
-			{
-				text: '1w',
-				events: {
-					click: function(e) {
-						requestData('1w');
-					}
-				}
-			}],
-			buttonTheme: {
-				width: 60
-			},
-			selected: 0,
-			inputEnabled: false
+			enabled: false
 		},
 		
 		scrollbar: {
@@ -266,6 +189,11 @@ function requestData(z) {
 	});
 }
 
+function changeZoom(z) {
+	zoom = z;
+	requestData(zoom);
+}
+
 function changeLimit(l) {
 	limit = l;
 	requestData(zoom);
@@ -302,6 +230,17 @@ function changeBaseCurrency(c) {
 </style>
 </head>
 <body>
+Zoom: 
+<a href="#" onclick="changeZoom('1m');">1m</a>
+<a href="#" onclick="changeZoom('5m');">5m</a>
+<a href="#" onclick="changeZoom('10m');">10m</a>
+<a href="#" onclick="changeZoom('1h');">1h</a>
+<a href="#" onclick="changeZoom('5h');">5h</a>
+<a href="#" onclick="changeZoom('10h');">10h</a>
+<a href="#" onclick="changeZoom('1d');">1d</a>
+<a href="#" onclick="changeZoom('3d');">3d</a>
+<a href="#" onclick="changeZoom('1w');">1w</a>
+<br/>
 Limit: 
 <a href="#" onclick="changeLimit('10');">10</a>
 <a href="#" onclick="changeLimit('25');">25</a>

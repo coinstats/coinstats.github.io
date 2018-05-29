@@ -159,8 +159,13 @@ function requestData(z) {
 }
 
 function updateSelect() {
+	// currencies
 	$("#select-currency option[value='" + currency + "']").prop('selected', true);
 	$("#select-basecurrency option[value='" + baseCurrency + "']").prop('selected', true);
+	// settings
+	$('input[type=radio][name=radio-scale]').filter('[value=' + scale + ']').prop('checked', true);
+	$('input[type=radio][name=radio-zoom]').filter('[value=' + zoom + ']').prop('checked', true);
+	$('input[type=radio][name=radio-limit]').filter('[value=' + limit + ']').prop('checked', true);
 }
 
 function changeScale(s) {
@@ -199,12 +204,24 @@ function changeBaseCurrency(c) {
 }
 
 function toggleSettings() {
-	$("#settings").prop('disabled', true);
+	$("#settings").slideToggle();
 }
 
-$(document).ready(function(){
+$(function() {
 	$('#settings-icon').click(function(e) {
 		toggleSettings();
+	});
+	
+	$('input[type=radio][name=radio-scale]').change(function () {
+		changeScale(this.value);
+	});
+	
+	$('input[type=radio][name=radio-zoom]').change(function () {
+		changeZoom(this.value);
+	});
+	
+	$('input[type=radio][name=radio-limit]').change(function () {
+		changeLimit(this.value);
 	});
 });
 </script>
@@ -223,11 +240,10 @@ body {
 
 header {
 	height: 60px;
-	background-color: #444;
+	background-color: #333;
 	display: flex;
 	align-items: center;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24);
 }
 
 nav {
@@ -236,6 +252,12 @@ nav {
 }
 
 main {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.main-container {
 	width: 90%;
 	height: 100%;
 	margin: auto;
@@ -265,6 +287,7 @@ main {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	cursor: pointer;
 }
 
 .box {
@@ -274,8 +297,7 @@ main {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24);
 }
 
 .select-currency {
@@ -285,10 +307,61 @@ main {
 	border: 0px;
 	padding: 0px 15px;
 	outline: 0 none;
+	cursor: pointer;
 }
 
 .chart {
 	height: 500px;
+}
+
+.settings {
+	position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #444;
+    z-index: 2;
+}
+
+.settings-container {
+	padding-top: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+input[type=radio] {
+	position: absolute;
+	visibility: hidden;
+	display: none;
+}
+
+label {
+	color: #ccc;
+	display: inline-block;
+	cursor: pointer;
+	padding: 5px 25px;
+}
+
+input[type=radio]:checked + label{
+	color: #000;
+	background: #e2e1e0;
+}
+
+label + input[type=radio] + label {
+	border-left: solid 1px #e2e1e0;
+}
+
+.radio-group {
+	border: solid 1px #e2e1e0;
+	margin: 5px 0px 20px 0px;
+	display: inline-block;
+	overflow: hidden;
+	box-shadow: 0px 1px 3px rgba(226,225,224,0.12), 0px 1px 2px rgba(226,225,224,0.24);
 }
 
 @media(max-width: 600px) {
@@ -319,47 +392,46 @@ main {
 </header>
 
 <main>
-	Scale: 
-	<a href="#" onclick="changeScale('linear');">linear</a>
-	<a href="#" onclick="changeScale('logarithmic');">logarithmic</a>
-	<br/>
-	Zoom: 
-	<a href="#" onclick="changeZoom('1m');">1m</a>
-	<a href="#" onclick="changeZoom('5m');">5m</a>
-	<a href="#" onclick="changeZoom('10m');">10m</a>
-	<a href="#" onclick="changeZoom('1h');">1h</a>
-	<a href="#" onclick="changeZoom('5h');">5h</a>
-	<a href="#" onclick="changeZoom('10h');">10h</a>
-	<a href="#" onclick="changeZoom('1d');">1d</a>
-	<a href="#" onclick="changeZoom('3d');">3d</a>
-	<a href="#" onclick="changeZoom('1w');">1w</a>
-	<br/>
-	Limit: 
-	<a href="#" onclick="changeLimit('10');">10</a>
-	<a href="#" onclick="changeLimit('25');">25</a>
-	<a href="#" onclick="changeLimit('50');">50</a>
-	<a href="#" onclick="changeLimit('100');">100</a>
-	<a href="#" onclick="changeLimit('200');">200</a>
-	<br/>
-	<div class="box">
-		<select id="select-currency" class="select-currency" onchange="changeCurrency(this.value)">
-			<option value="BTC">BTC</option>
-			<option value="BCH">BCH</option>
-			<option value="ETH">ETH</option>
-			<option value="LTC">LTC</option>
-			<option value="XMR">XMR</option>
-			<option value="NMC">NMC</option>
-			<option value="AEON">AEON</option>
-		</select>
-		/
-		<select id="select-basecurrency" class="select-currency" onchange="changeBaseCurrency(this.value)">
-			<option value="BTC">BTC</option>
-			<option value="USD">USD</option>
-			<option value="EUR">EUR</option>
-		</select>
+	<div class="main-container">
+		<div class="box">
+			<select id="select-currency" class="select-currency" onchange="changeCurrency(this.value)">
+				<option value="BTC">BTC</option>
+				<option value="BCH">BCH</option>
+				<option value="ETH">ETH</option>
+				<option value="LTC">LTC</option>
+				<option value="XMR">XMR</option>
+				<option value="NMC">NMC</option>
+				<option value="AEON">AEON</option>
+			</select>
+			/
+			<select id="select-basecurrency" class="select-currency" onchange="changeBaseCurrency(this.value)">
+				<option value="BTC">BTC</option>
+				<option value="USD">USD</option>
+				<option value="EUR">EUR</option>
+			</select>
+		</div>
+		
+		<div id="chart" class="box chart"></div>
 	</div>
 	
-	<div id="chart" class="box chart"></div>
+	<div id="settings" class="settings">
+		<div class="settings-container">
+			<label>Scale</label>
+			<div class="radio-group">
+				<input type="radio" name="radio-scale" id="option-linear" value="linear"><label for="option-linear">linear</label><input type="radio" name="radio-scale" id="option-logarithmic" value="logarithmic"><label for="option-logarithmic">logarithmic</label>
+			</div>
+				
+			<label>Zoom</label>
+			<div class="radio-group">
+				<input type="radio" name="radio-zoom" id="option-1m" value="1m"/><label for="option-1m">1m</label><input type="radio" name="radio-zoom" id="option-5m" value="5m"/><label for="option-5m">5m</label><input type="radio" name="radio-zoom" id="option-10m" value="10m"/><label for="option-10m">10m</label><input type="radio" name="radio-zoom" id="option-1h" value="1h"/><label for="option-1h">1h</label><input type="radio" name="radio-zoom" id="option-5h" value="5h"/><label for="option-5h">5h</label><input type="radio" name="radio-zoom" id="option-10h" value="10h"/><label for="option-10h">10h</label><input type="radio" name="radio-zoom" id="option-1d" value="1d"/><label for="option-1d">1d</label><input type="radio" name="radio-zoom" id="option-3d" value="3d"/><label for="option-3d">3d</label><input type="radio" name="radio-zoom" id="option-1w" value="1w"/><label for="option-1w">1w</label>
+			</div>
+				
+			<label>Limit</label>
+			<div class="radio-group">
+				<input type="radio" name="radio-limit" id="option-10" value="10"/><label for="option-10">10</label><input type="radio" name="radio-limit" id="option-25" value="25"/><label for="option-25">25</label><input type="radio" name="radio-limit" id="option-50" value="50"/><label for="option-50">50</label><input type="radio" name="radio-limit" id="option-100" value="100"/><label for="option-100">100</label><input type="radio" name="radio-limit" id="option-200" value="200"/><label for="option-200">200</label>
+			</div>
+		</div>
+	</div>
 </main>
 
 </div>

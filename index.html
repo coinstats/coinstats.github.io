@@ -15,7 +15,6 @@ var chart;
 $(function() {
 	chart = Highcharts.stockChart('chart', {
 		chart: {
-			height: '56%',
 			events: {
 				load:  function() {
 					chart = this,
@@ -39,10 +38,7 @@ $(function() {
 		yAxis: [{
 			title: {
 				text: ''
-			},
-			resize: {
-				enabled: true
-			},
+			}
 		},
 		{
 			visible: false
@@ -177,34 +173,142 @@ function changeLimit(l) {
 }
 
 function changeCurrency(c) {
+	if(baseCurrency == c) { // currency == basecurrency
+		return;
+	}
 	currency = c;
 	requestData(zoom);
 }
 
 function changeBaseCurrency(c) {
+	if(currency == c) { // currency == basecurrency
+		return;
+	}
 	baseCurrency = c;
 	requestData(zoom);
 }
+
+function toggleSettings() {
+	$("#settings").prop('disabled', true);
+}
+
+$(document).ready(function(){
+	$('#settings-icon').click(function(e) {
+		toggleSettings();
+	});
+});
 </script>
 <style>
+body {
+	background-color: #e2e1e0;
+	margin: 0px;
+	padding: 0px;
+}
+
 .container {
-	width: 80%;
+	width: 100%;
+	height: 100%;
+	
+}
+
+header {
+	height: 60px;
+	background-color: #444;
+	display: flex;
+	align-items: center;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+nav {
+	width: 100%;
+	display: flex;
+}
+
+main {
+	width: 90%;
+	height: 100%;
 	margin: auto;
 }
 
+.wrapper-logo {
+	width: 50%;
+	color: #e2e1e0;
+	font-family: 'Arial Regular';
+	font-size: 20;
+	font-weight: bold;
+	padding: 0% 0% 0% 5%;
+	display: flex;
+	align-items: center;
+}
+
+.wrapper-settings-icon {
+	width: 50%;
+	padding: 0% 5% 0% 0%;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.settings-icon {
+	width: 40px;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.box {
+	background-color: #fff;
+	margin-top: 20px;
+	padding: 5px 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.select-currency {
+	height: 40px;
+	background-color: #fff;
+	text-align-last: center;
+	border: 0px;
+	padding: 0px 15px;
+	outline: 0 none;
+}
+
+.chart {
+	height: 500px;
+}
+
 @media(max-width: 600px) {
-	.container {
-		width: 100%;
+	.box {
+		padding: 2px 5px;
 	}
 	.chart {
-		height: 400px;
+		height: 300px;
 	}
 }
 </style>
 </head>
 <body>
 
-<div id="container" class="container">
+<div class="container">
+
+<header>
+	<nav>
+		<div class="wrapper-logo">
+			LogoName
+		</div>
+		<div class="wrapper-settings-icon">
+			<div id="settings-icon" class="settings-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" fill="#e2e1e0"/></svg>
+			</div>
+		</div>
+	</nav>
+</header>
+
+<main>
 	Scale: 
 	<a href="#" onclick="changeScale('linear');">linear</a>
 	<a href="#" onclick="changeScale('logarithmic');">logarithmic</a>
@@ -227,21 +331,27 @@ function changeBaseCurrency(c) {
 	<a href="#" onclick="changeLimit('100');">100</a>
 	<a href="#" onclick="changeLimit('200');">200</a>
 	<br/>
-	Currency: 
-	<a href="#" onclick="changeCurrency('BTC');">BTC</a>
-	<a href="#" onclick="changeCurrency('BCH');">BCH</a>
-	<a href="#" onclick="changeCurrency('ETH');">ETH</a>
-	<a href="#" onclick="changeCurrency('LTC');">LTC</a>
-	<a href="#" onclick="changeCurrency('XMR');">XMR</a>
-	<a href="#" onclick="changeCurrency('NMC');">NMC</a>
-	<a href="#" onclick="changeCurrency('AEON');">AEON</a>
-	<br />
-	Base Currency: 
-	<a href="#" onclick="changeBaseCurrency('BTC');">BTC</a>
-	<a href="#" onclick="changeBaseCurrency('USD');">USD</a>
-	<a href="#" onclick="changeBaseCurrency('EUR');">EUR</a>
-	<div id="chart"></div>
-</div>
+	<div class="box">
+		<select id="currency" class="select-currency" onchange="changeCurrency(this.value)">
+			<option value="BTC">BTC</option>
+			<option value="BCH">BCH</option>
+			<option value="ETH">ETH</option>
+			<option value="LTC">LTC</option>
+			<option value="XMR">XMR</option>
+			<option value="NMC">NMC</option>
+			<option value="AEON">AEON</option>
+		</select>
+		/
+		<select id="baseCurrency" class="select-currency" onchange="changeBaseCurrency(this.value)">
+			<option value="BTC">BTC</option>
+			<option value="USD">USD</option>
+			<option value="EUR">EUR</option>
+		</select>
+	</div>
+	
+	<div id="chart" class="box chart"></div>
+</main>
 
+</div>
 </body>
 </html>

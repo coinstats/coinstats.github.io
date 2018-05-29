@@ -154,7 +154,13 @@ function requestData(z) {
 		chart.series[1].setData(ohlc, false);
 		chart.series[0].setData(volume, false);
 		chart.redraw();
+		updateSelect();
 	});
+}
+
+function updateSelect() {
+	$("#select-currency option[value='" + currency + "']").prop('selected', true);
+	$("#select-basecurrency option[value='" + baseCurrency + "']").prop('selected', true);
 }
 
 function changeScale(s) {
@@ -174,6 +180,8 @@ function changeLimit(l) {
 
 function changeCurrency(c) {
 	if(baseCurrency == c) { // currency == basecurrency
+		alert("ERROR: " + c + "/" + baseCurrency + " not possible.");
+		updateSelect();
 		return;
 	}
 	currency = c;
@@ -182,6 +190,8 @@ function changeCurrency(c) {
 
 function changeBaseCurrency(c) {
 	if(currency == c) { // currency == basecurrency
+		alert("ERROR: " + currency + "/" + c + " not possible.");
+		updateSelect();
 		return;
 	}
 	baseCurrency = c;
@@ -332,7 +342,7 @@ main {
 	<a href="#" onclick="changeLimit('200');">200</a>
 	<br/>
 	<div class="box">
-		<select id="currency" class="select-currency" onchange="changeCurrency(this.value)">
+		<select id="select-currency" class="select-currency" onchange="changeCurrency(this.value)">
 			<option value="BTC">BTC</option>
 			<option value="BCH">BCH</option>
 			<option value="ETH">ETH</option>
@@ -342,7 +352,7 @@ main {
 			<option value="AEON">AEON</option>
 		</select>
 		/
-		<select id="baseCurrency" class="select-currency" onchange="changeBaseCurrency(this.value)">
+		<select id="select-basecurrency" class="select-currency" onchange="changeBaseCurrency(this.value)">
 			<option value="BTC">BTC</option>
 			<option value="USD">USD</option>
 			<option value="EUR">EUR</option>

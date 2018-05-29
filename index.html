@@ -12,107 +12,105 @@ var baseCurrency = 'USD';
 var zoom = '1m';
 var chart;
 
-$(function() {
-	chart = Highcharts.stockChart('chart', {
-		chart: {
-			events: {
-				load:  function() {
-					chart = this,
-					requestData('1m');
-				}
+var options = {
+	chart: {
+		events: {
+			load:  function() {
+				chart = this,
+				requestData('1m');
 			}
+		}
+	},
+	
+	rangeSelector: {
+		enabled: false
+	},
+	
+	scrollbar: {
+		enabled: false
+	},
+	
+	navigator: {
+		enabled: false
+	},
+	
+	yAxis: [{
+		title: {
+			text: ''
+		}
+	},
+	{
+		visible: false
+	}],
+	
+	plotOptions: {
+		series: {
+			softThreshold: true
 		},
-		
-		rangeSelector: {
-			enabled: false
-		},
-		
-		scrollbar: {
-			enabled: false
-		},
-		
-		navigator: {
-			enabled: false
-		},
-		
-		yAxis: [{
-			title: {
-				text: ''
-			}
-		},
-		{
-			visible: false
-		}],
-		
-		plotOptions: {
-			series: {
-				softThreshold: true
+		candlestick: {
+			color: '#d82e2e',
+			lineColor: '#d82e2e',	    		
+			upLineColor: '#4dd82d',
+			upColor: '#4dd82d'
+		}
+	},
+	
+	tooltip: {
+		backgroundColor: {
+			linearGradient: {
+				x1: 0,
+				y1: 0,
+				x2: 0,
+				y2: 1
 			},
-			candlestick: {
-				color: '#d82e2e',
-				lineColor: '#d82e2e',	    		
-				upLineColor: '#4dd82d',
-				upColor: '#4dd82d'
-			}
+			stops: [
+				[0, 'white'],
+				[1, '#EEE']
+			]
 		},
-		
-		tooltip: {
-			backgroundColor: {
-				linearGradient: {
-					x1: 0,
-					y1: 0,
-					x2: 0,
-					y2: 1
-				},
-				stops: [
-					[0, 'white'],
-					[1, '#EEE']
-				]
-			},
-			borderColor: 'gray',
-			borderWidth: 1,
-			shared: true,
-			follorPointer: true,
-			formatter: function () {
-				var s;
-				s = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', new Date(this.x)) + "<br/>";
-				s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
-				s += "<b>Open:</b> " + this.points[1].point.open.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
-				s += "<b>High:</b> " + this.points[1].point.high.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
-				s += "<b>Low:</b> " + this.points[1].point.low.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
-				s += "<b>Close:</b> " + this.points[1].point.close.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
-				s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
-				s += "<b>Volume:</b> " + this.points[0].y.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
-				return s;
-			}
-		},
-		
-		series: [{
-			type: 'column',
-			name: 'Volume',
-			yAxis: 1,
-			dataGrouping: {
-				enabled: false
-			}
-		},
-		{
-			type: 'candlestick',
-			name: 'OHLC',
-			yAxis: 0,
-			dataGrouping: {
-				enabled: false
-			}
-		}],
-		
-		exporting: {
-			enabled: false
-		},
-		
-		credits: {
+		borderColor: 'gray',
+		borderWidth: 1,
+		shared: true,
+		follorPointer: true,
+		formatter: function () {
+			var s;
+			s = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', new Date(this.x)) + "<br/>";
+			s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
+			s += "<b>Open:</b> " + this.points[1].point.open.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+			s += "<b>High:</b> " + this.points[1].point.high.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+			s += "<b>Low:</b> " + this.points[1].point.low.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+			s += "<b>Close:</b> " + this.points[1].point.close.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+			s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
+			s += "<b>Volume:</b> " + this.points[0].y.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
+			return s;
+		}
+	},
+	
+	series: [{
+		type: 'column',
+		name: 'Volume',
+		yAxis: 1,
+		dataGrouping: {
 			enabled: false
 		}
-	});
-});
+	},
+	{
+		type: 'candlestick',
+		name: 'OHLC',
+		yAxis: 0,
+		dataGrouping: {
+			enabled: false
+		}
+	}],
+	
+	exporting: {
+		enabled: false
+	},
+	
+	credits: {
+		enabled: false
+	}
+};
 
 function requestData(z) {
 	zoom = z;
@@ -208,6 +206,8 @@ function toggleSettings() {
 }
 
 $(function() {
+	chart = new Highcharts.stockChart('chart', options);
+
 	$('#settings-icon').click(function(e) {
 		toggleSettings();
 	});

@@ -77,11 +77,8 @@ var options = {
 			s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
 			s += "<b>Volume:</b> " + this.points[0].y.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8}) + "<br/>";
 			return s;
-        },
-        positioner: function (labelWidth, labelHeight, point) {
-            return { x: point.plotX + 10, y: point.plotY + 10 };
-        },
-        split: false
+		},
+		split: false
 	},
 	
 	series: [{

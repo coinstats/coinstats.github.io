@@ -4,6 +4,7 @@ var currency = 'BTC';
 var baseCurrency = 'USD';
 var zoom = '1m';
 var chart;
+var allCurrencies = {};
 
 var currencies = [
 	"BTC",
@@ -212,11 +213,52 @@ function changeBaseCurrency(c) {
 	requestData(zoom);
 }
 
+function loadAllCurrencies() {
+	var url = "https://min-api.cryptocompare.com/data/all/coinlist";
+	$.getJSON(url, function(data) {
+		data = data['Data'];
+		var baseUrl = data['BaseImageUrl'];
+		$.each(data, function(i, coin) {
+			if(currencies.indexOf(i) != -1) {
+				allCurrencies[i] = {};
+				allCurrencies[i]['symbol'] = coin['Symbol'];
+				allCurrencies[i]['name'] = coin['CoinName'];
+				allCurrencies[i]['image'] = baseUrl + coin['ImageUrl'];
+			}
+		});
+	});
+}
+
+function loadOverview() {
+	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + currencies.toString() + "&tsyms=" + baseCurrency;
+	console.log(url);
+	$.getJSON(url, function(data) {
+		data = data['RAW'];
+		var tbody = document.getElementById('tbody-overview');
+		$.each(data, function(i, coin) {
+			var tr = document.createElement('tr');
+			tr.appendChild(document.createElement('td'));
+			tr.appendChild(document.createElement('td'));
+			tr.appendChild(document.createElement('td'));
+			tr.appendChild(document.createElement('td'));
+			tr.cells[0].appendChild(document.createTextNode(i));
+			tr.cells[1].appendChild(document.createTextNode(coin[baseCurrency]['PRICE']));
+			tr.cells[2].appendChild(document.createTextNode(coin[baseCurrency]['MKTCAP']));
+			tr.cells[3].appendChild(document.createTextNode(coin[baseCurrency]['TOTALVOLUME24HTO']));
+			tbody.appendChild(tr);
+		});
+	});
+}
+
 function toggleSettings() {
 	$("#settings-container").slideToggle();
 }
 
 $(function() {
+	loadAllCurrencies();
+	
+	loadOverview();
+	
 	chart = new Highcharts.stockChart('chart', options);
 
 	$('#settings-icon').click(function(e) {

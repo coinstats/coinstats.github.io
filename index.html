@@ -25,29 +25,31 @@
 </header>
 
 <main>
-	<div class="main-container">
-		<div class="box">
-			<select id="select-currency" class="select-currency" onchange="changeCurrency(this.value)">
-				<option value="BTC">BTC</option>
-				<option value="BCH">BCH</option>
-				<option value="ETH">ETH</option>
-				<option value="LTC">LTC</option>
-				<option value="XMR">XMR</option>
-				<option value="NMC">NMC</option>
-				<option value="AEON">AEON</option>
-			</select>
-			/
-			<select id="select-basecurrency" class="select-currency" onchange="changeBaseCurrency(this.value)">
-				<option value="BTC">BTC</option>
-				<option value="USD">USD</option>
-				<option value="EUR">EUR</option>
-			</select>
+	<div id="details-container">
+		<div class="details-container">
+			<div class="box">
+				<select id="select-currency" class="select-currency" onchange="changeCurrency(this.value)">
+					<option value="BTC">BTC</option>
+					<option value="BCH">BCH</option>
+					<option value="ETH">ETH</option>
+					<option value="LTC">LTC</option>
+					<option value="XMR">XMR</option>
+					<option value="NMC">NMC</option>
+					<option value="AEON">AEON</option>
+				</select>
+				/
+				<select id="select-basecurrency" class="select-currency" onchange="changeBaseCurrency(this.value)">
+					<option value="BTC">BTC</option>
+					<option value="USD">USD</option>
+					<option value="EUR">EUR</option>
+				</select>
+			</div>
+			
+			<div id="chart" class="box chart"></div>
 		</div>
-		
-		<div id="chart" class="box chart"></div>
 	</div>
 	
-	<div id="settings" class="settings">
+	<div id="settings-container">
 		<div class="settings-container">
 			<label>Scale</label>
 			<div class="radio-group">

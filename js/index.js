@@ -197,7 +197,7 @@ function changeBaseCurrency(c) {
 }
 
 function toggleSettings() {
-	$("#settings").slideToggle();
+	$("#settings-container").slideToggle();
 }
 
 $(function() {

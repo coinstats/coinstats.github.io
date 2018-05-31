@@ -5,6 +5,22 @@ var baseCurrency = 'USD';
 var zoom = '1m';
 var chart;
 
+var currencies = [
+	"BTC",
+	"BCH",
+	"ETH",
+	"LTC",
+	"XMR",
+	"NMC",
+	"AEON"
+];
+
+var baseCurrencies = [
+	"BTC",
+	"USD",
+	"EUR"
+];
+
 var options = {
 	chart: {
 		events: {

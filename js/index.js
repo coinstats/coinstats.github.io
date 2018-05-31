@@ -171,7 +171,7 @@ function requestData(z) {
 function updateSelect() {
 	// currencies
 	$("#select-currency option[value='" + currency + "']").prop('selected', true);
-	$("#select-basecurrency option[value='" + baseCurrency + "']").prop('selected', true);
+	$("#nav-basecurrency option[value='" + baseCurrency + "']").prop('selected', true);
 	// settings
 	$('input[type=radio][name=radio-scale]').filter('[value=' + scale + ']').prop('checked', true);
 	$('input[type=radio][name=radio-zoom]').filter('[value=' + zoom + ']').prop('checked', true);
@@ -261,7 +261,7 @@ $(function() {
 	
 	chart = new Highcharts.stockChart('chart', options);
 
-	$('#settings-icon').click(function(e) {
+	$('#nav-settings').click(function(e) {
 		toggleSettings();
 	});
 	

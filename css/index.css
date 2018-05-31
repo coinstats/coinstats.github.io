@@ -74,7 +74,30 @@ main {
 	height: 500px;
 }
 
+#overview-container {
+	
+}
+
+.overview-container {
+	width: 90%;
+	height: 100%;
+	margin: auto;
+}
+
 #details-container {
+	
+}
+
+.table-overview {
+	display: block;
+	overflow-x: auto;
+}
+
+.thead-overview {
+	
+}
+
+.tbody-overview {
 	
 }
 

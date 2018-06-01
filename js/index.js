@@ -247,6 +247,9 @@ function loadOverview() {
 		tbody.empty();
 		$.each(data, function(i, coin) {
 			tr = document.createElement('tr');
+			var attr = document.createAttribute("data-currency");
+			attr.value = i;
+			tr.setAttributeNode(attr);
 			tr.appendChild(document.createElement('td'));
 			tr.appendChild(document.createElement('td'));
 			tr.appendChild(document.createElement('td'));
@@ -258,7 +261,7 @@ function loadOverview() {
 			tbody.append(tr);
 		});
 		$("#tbody-overview tr").click(function() {
-			var c = $(this).children('td:first').html();
+			var c = $(this).attr("data-currency");
 			changeCurrency(c);
 		});
 	});

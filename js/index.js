@@ -56,7 +56,8 @@ var options = {
 	
 	plotOptions: {
 		series: {
-			softThreshold: true
+			softThreshold: true,
+			animation: false
 		},
 		candlestick: {
 			color: '#d82e2e',

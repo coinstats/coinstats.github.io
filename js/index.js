@@ -258,6 +258,10 @@ function loadOverview() {
 			tr.cells[3].appendChild(document.createTextNode(coin[baseCurrency]['TOTALVOLUME24HTO'].toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})));
 			tbody.append(tr);
 		});
+		$("#tbody-overview tr").click(function() {
+			var c = $(this).children('td:first').html();
+			changeCurrency(c);
+		});
 	});
 }
 

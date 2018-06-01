@@ -96,26 +96,32 @@ main {
 	margin: auto;
 }
 
-#details-container {
-	
-}
-
 .table-overview {
 	display: block;
 	overflow-x: auto;
+	border-collapse: collapse;
 }
 
-.table-overview  td {
+#tbody-overview tr:hover {
+	background-color: #e2e1e0;
+	cursor: pointer;
+}
+
+#tbody-overview  td {
 	border-top: 1px solid #e2e1e0;
 	padding: 3px 10px 3px 10px;
 }
 
-.table-overview td:nth-child(1) {
+#tbody-overview td:nth-child(1) {
 	text-align: center;
 }
 
-.table-overview td:nth-child(2), td:nth-child(3), td:nth-child(4) {
+#tbody-overview td:nth-child(2), td:nth-child(3), td:nth-child(4) {
 	text-align: right;
+}
+
+#details-container {
+	
 }
 
 .details-container {

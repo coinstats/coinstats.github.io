@@ -229,13 +229,25 @@ function loadAllCurrencies() {
 }
 
 function loadOverview() {
+	var thead = $("#thead-overview");
+	thead.empty();
+	var tr = document.createElement('tr');
+	tr.appendChild(document.createElement('th'));
+	tr.appendChild(document.createElement('th'));
+	tr.appendChild(document.createElement('th'));
+	tr.appendChild(document.createElement('th'));
+	tr.cells[0].appendChild(document.createTextNode('Name'));
+	tr.cells[1].appendChild(document.createTextNode('Price (' + baseCurrency + ')'));
+	tr.cells[2].appendChild(document.createTextNode('Marketcap (' + baseCurrency + ')'));
+	tr.cells[3].appendChild(document.createTextNode('24h-Volume (' + baseCurrency + ')'));
+	thead.append(tr);
 	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + currencies.toString() + "&tsyms=" + baseCurrency;
 	$.getJSON(url, function(data) {
 		data = data['RAW'];
 		var tbody = $("#tbody-overview");
 		tbody.empty();
 		$.each(data, function(i, coin) {
-			var tr = document.createElement('tr');
+			tr = document.createElement('tr');
 			tr.appendChild(document.createElement('td'));
 			tr.appendChild(document.createElement('td'));
 			tr.appendChild(document.createElement('td'));

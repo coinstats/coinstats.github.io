@@ -242,9 +242,9 @@ function loadOverview() {
 			tr.appendChild(document.createElement('td'));
 			tr.appendChild(document.createElement('td'));
 			tr.cells[0].appendChild(document.createTextNode(i));
-			tr.cells[1].appendChild(document.createTextNode(coin[baseCurrency]['PRICE']));
-			tr.cells[2].appendChild(document.createTextNode(coin[baseCurrency]['MKTCAP']));
-			tr.cells[3].appendChild(document.createTextNode(coin[baseCurrency]['TOTALVOLUME24HTO']));
+			tr.cells[1].appendChild(document.createTextNode(coin[baseCurrency]['PRICE'].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8})));
+			tr.cells[2].appendChild(document.createTextNode(coin[baseCurrency]['MKTCAP'].toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})));
+			tr.cells[3].appendChild(document.createTextNode(coin[baseCurrency]['TOTALVOLUME24HTO'].toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})));
 			tbody.appendChild(tr);
 		});
 	});

@@ -32,6 +32,13 @@ var options = {
 		}
 	},
 	
+	noData: {
+		style: {
+			fontWeight: 'bold',
+			fontSize: '15px'
+		}
+	},
+	
 	rangeSelector: {
 		enabled: false
 	},
@@ -195,22 +202,13 @@ function changeLimit(l) {
 }
 
 function changeCurrency(c) {
-	if(baseCurrency == c) { // currency == basecurrency
-		alert("ERROR: " + c + "/" + baseCurrency + " not possible.");
-		updateSelect();
-		return;
-	}
 	currency = c;
 	requestData(zoom);
 }
 
 function changeBaseCurrency(c) {
-	if(currency == c) { // currency == basecurrency
-		alert("ERROR: " + currency + "/" + c + " not possible.");
-		updateSelect();
-		return;
-	}
 	baseCurrency = c;
+	loadOverview();
 	requestData(zoom);
 }
 
@@ -232,10 +230,10 @@ function loadAllCurrencies() {
 
 function loadOverview() {
 	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + currencies.toString() + "&tsyms=" + baseCurrency;
-	console.log(url);
 	$.getJSON(url, function(data) {
 		data = data['RAW'];
-		var tbody = document.getElementById('tbody-overview');
+		var tbody = $("#tbody-overview");
+		tbody.empty();
 		$.each(data, function(i, coin) {
 			var tr = document.createElement('tr');
 			tr.appendChild(document.createElement('td'));
@@ -246,7 +244,7 @@ function loadOverview() {
 			tr.cells[1].appendChild(document.createTextNode(coin[baseCurrency]['PRICE'].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8})));
 			tr.cells[2].appendChild(document.createTextNode(coin[baseCurrency]['MKTCAP'].toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})));
 			tr.cells[3].appendChild(document.createTextNode(coin[baseCurrency]['TOTALVOLUME24HTO'].toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})));
-			tbody.appendChild(tr);
+			tbody.append(tr);
 		});
 	});
 }

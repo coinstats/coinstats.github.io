@@ -55,13 +55,22 @@ var options = {
 		enabled: false
 	},
 	
-	yAxis: [{
-		visible: true,
-		opposite: false
-	},
-	{
-		visible: true,
-		opposite: true
+	yAxis: [
+		{
+			title: {
+				text: 'OHLC'
+			},
+			height: '60%',
+			lineWidth: 2,
+			offset: 20,
+		}, {
+			title: {
+				text: 'Volume'
+			},
+			top: '65%',
+			height: '35%',
+			offset: 20,
+			lineWidth: 2
 	}],
 	
 	plotOptions: {
@@ -115,7 +124,7 @@ var options = {
 	series: [{
 		type: 'column',
 		name: 'Volume',
-		yAxis: 0,
+		yAxis: 1,
 		dataGrouping: {
 			enabled: false
 		}
@@ -123,7 +132,7 @@ var options = {
 	{
 		type: 'candlestick',
 		name: 'OHLC',
-		yAxis: 1,
+		yAxis: 0,
 		dataGrouping: {
 			enabled: false
 		}

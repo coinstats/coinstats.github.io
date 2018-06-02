@@ -146,6 +146,7 @@ var options = {
 };
 
 function requestData(z) {
+	chart.showLoading();
 	zoom = z;
 	var url;
 	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
@@ -186,6 +187,7 @@ function requestData(z) {
 		chart.series[0].setData(volume, false);
 		chart.redraw();
 		updateSelect();
+		chart.hideLoading();
 	});
 }
 

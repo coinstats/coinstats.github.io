@@ -45,7 +45,21 @@
 	<div id="details-container">
 		<div class="details-container">
 			<div class="box">
-				<div id="chart" class="chart"></div>
+				<div class="grid-container">
+					<div id="candle-options">
+						<text x="10" y="15" style="color:#666666;fill:#666666;">Candles</text>
+						<button type="button" onClick="requestData('1m')">1m</button> 
+						<button type="button" onClick="requestData('5m')">5m</button> 
+						<button type="button" onClick="requestData('10m')">10m</button> 
+						<button type="button" onClick="requestData('1h')">1h</button> 
+						<button type="button" onClick="requestData('5h')">5h</button> 
+						<button type="button" onClick="requestData('10h')">10h</button> 
+						<button type="button" onClick="requestData('1d')">1d</button> 
+						<button type="button" onClick="requestData('3d')">3d</button> 
+						<button type="button" onClick="requestData('1w')">1w</button> 
+					</div>
+					<div id="chart" class="chart"></div>
+				</div>
 			</div>
 		</div>
 	</div>

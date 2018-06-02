@@ -1,5 +1,5 @@
 var scale = 'linear';
-var limit = 25;
+var limit = 2000;
 var currency = 'BTC';
 var baseCurrency = 'USD';
 var zoom = '1m';
@@ -29,7 +29,12 @@ var options = {
 				chart = this,
 				requestData('1m');
 			}
-		}
+		},
+		zoomType: 'xy',
+		//Should use resetZoomButton to reset zoom
+		//However, button does not show up see issue https://github.com/highcharts/highcharts/issues/8200
+		//Workaround
+		pinchType: ''
 	},
 	
 	noData: {
@@ -40,15 +45,15 @@ var options = {
 	},
 	
 	rangeSelector: {
-		enabled: false
+		enabled: true,
 	},
 	
 	scrollbar: {
-		enabled: false
+		enabled: true
 	},
 	
 	navigator: {
-		enabled: false
+		enabled: true
 	},
 	
 	yAxis: [
@@ -130,11 +135,11 @@ var options = {
 			enabled: false
 		}
 	}],
-	
+
 	exporting: {
 		enabled: false
 	},
-	
+
 	credits: {
 		enabled: false
 	}

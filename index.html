@@ -32,7 +32,7 @@
 
 <main>
 	<div id="overview-container" class="overview-container">
-		<div class="box">
+		<div class="box box-overview">
 			<table class="table-overview">
 				<thead id="thead-overview">
 				</thead>
@@ -44,7 +44,59 @@
 	
 	<div id="details-container">
 		<div class="details-container">
-			<div class="box">
+			<div class="box box-details">
+				<div class="chart-price">
+					<div class="chart-price-close">
+						<b><span id="chart-price-close"></span></b>
+						<span id="chart-price-diff"></span>
+					</div>
+					<div class="chart-price-extrema">
+						<div>
+							<b>min.</b> <span id="chart-price-min"></span>
+						</div>
+						<div>
+							<b>max.</b> <span id="chart-price-max"></span>
+						</div>
+					</div>
+				</div>
+				<ul class="chart-zoom">
+					<li>
+						<input type="radio" name="chart-zoom" id="option-1m" value="1m"/>
+						<label for="option-1m">1m</label>
+					</li>
+					<li>
+						<input type="radio" name="chart-zoom" id="option-5m" value="5m"/>
+						<label for="option-5m">5m</label>
+					</li>
+					<li>
+						<input type="radio" name="chart-zoom" id="option-10m" value="10m"/>
+						<label for="option-10m">10m</label>
+					</li>
+					<li>
+						<input type="radio" name="chart-zoom" id="option-1h" value="1h"/>
+						<label for="option-1h">1h</label>
+					</li>
+					<li>
+						<input type="radio" name="chart-zoom" id="option-5h" value="5h"/>
+						<label for="option-5h">5h</label>
+					</li>
+					<li>
+						<input type="radio" name="chart-zoom" id="option-10h" value="10h"/>
+						<label for="option-10h">10h</label>
+					</li>
+					<li>
+						<input type="radio" name="chart-zoom" id="option-1d" value="1d"/>
+						<label for="option-1d">1d</label>
+					</li>
+					<li>
+						<input type="radio" name="chart-zoom" id="option-3d" value="3d"/>
+						<label for="option-3d">3d</label>
+					</li>
+					<li>
+						<input type="radio" name="chart-zoom" id="option-1w" value="1w"/>
+						<label for="option-1w">1w</label>
+					</li>
+				</ul>
 				<div id="chart" class="chart"></div>
 			</div>
 		</div>
@@ -55,11 +107,6 @@
 			<label>Scale</label>
 			<div class="radio-group">
 				<input type="radio" name="radio-scale" id="option-linear" value="linear"><label for="option-linear">linear</label><input type="radio" name="radio-scale" id="option-logarithmic" value="logarithmic"><label for="option-logarithmic">logarithmic</label>
-			</div>
-				
-			<label>Zoom</label>
-			<div class="radio-group">
-				<input type="radio" name="radio-zoom" id="option-1m" value="1m"/><label for="option-1m">1m</label><input type="radio" name="radio-zoom" id="option-5m" value="5m"/><label for="option-5m">5m</label><input type="radio" name="radio-zoom" id="option-10m" value="10m"/><label for="option-10m">10m</label><input type="radio" name="radio-zoom" id="option-1h" value="1h"/><label for="option-1h">1h</label><input type="radio" name="radio-zoom" id="option-5h" value="5h"/><label for="option-5h">5h</label><input type="radio" name="radio-zoom" id="option-10h" value="10h"/><label for="option-10h">10h</label><input type="radio" name="radio-zoom" id="option-1d" value="1d"/><label for="option-1d">1d</label><input type="radio" name="radio-zoom" id="option-3d" value="3d"/><label for="option-3d">3d</label><input type="radio" name="radio-zoom" id="option-1w" value="1w"/><label for="option-1w">1w</label>
 			</div>
 				
 			<label>Limit</label>

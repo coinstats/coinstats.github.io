@@ -23,6 +23,14 @@ main {
 	position: relative;
 }
 
+.green {
+	color: #4dd82d;
+}
+
+.red {
+	color: #d82e2e;
+}
+
 .container-nav-left {
 	width: 50%;
 	color: #e2e1e0;
@@ -38,6 +46,7 @@ main {
 	width: 50%;
 	padding: 0% 5% 0% 0%;
 	display: flex;
+	align-items: center;
 	justify-content: flex-end;
 }
 
@@ -64,27 +73,21 @@ main {
 
 .box {
 	background-color: #fff;
-	margin-top: 20px;
+	margin: 20px 0px 20px 0px;
 	padding: 5px 10px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	box-shadow: 0px 1px 3px rgba(0,0,0,0.12), 0px 1px 2px rgba(0,0,0,0.24);
 }
 
-.select-currency {
-	height: 40px;
-	background-color: #fff;
-	text-align-last: center;
-	border: 0px;
-	padding: 0px 15px;
-	outline: 0 none;
-	cursor: pointer;
+.box-overview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.chart {
-	width: 99%;
-	height: 500px;
+.box-details {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 #overview-container {
@@ -108,7 +111,7 @@ main {
 	cursor: pointer;
 }
 
-#tbody-overview  td {
+#tbody-overview td {
 	border-top: 1px solid #e2e1e0;
 	padding: 3px 10px 3px 10px;
 }
@@ -131,6 +134,67 @@ main {
 	margin: auto;
 }
 
+.chart-price {
+	width: 100%;
+	display: flex;
+}
+
+.chart-price-close {
+	width: 50%;
+	padding: 0px 0px 0px 5px;
+	display: flex;
+	flex-direction: column;
+}
+
+.chart-price-extrema {
+	width: 50%;
+	padding: 0px 5px 0px 0px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.chart-zoom {
+	padding: 0px;
+	width: 100%;
+	display: flex;
+	border: solid 1px #e2e1e0;
+	margin: 10px 0px 10px 0px;
+	overflow-x: auto;
+}
+
+.chart-zoom li {
+	width: 100%;
+	display: block;
+}
+
+.chart-zoom label {
+	display: block;
+	text-align: center;
+	cursor: pointer;
+	padding: 5px 25px;
+}
+
+.chart-zoom input[type=radio] {
+	position: absolute;
+	visibility: hidden;
+	display: none;
+}
+
+.chart-zoom input[type=radio]:checked + label {
+	color: #fff;
+	background-color: #e2e1e0;
+}
+
+.chart-zoom li + li {
+	border-left: solid 1px #e2e1e0;
+}
+
+.chart {
+	width: 99%;
+	height: 500px;
+}
+
 #settings-container {
 	position: absolute;
 	display: none;
@@ -151,25 +215,25 @@ main {
 	align-items: center;
 }
 
-input[type=radio] {
+.radio-group input[type=radio] {
 	position: absolute;
 	visibility: hidden;
 	display: none;
 }
 
-label {
+.radio-group label {
 	color: #ccc;
 	display: inline-block;
 	cursor: pointer;
 	padding: 5px 25px;
 }
 
-input[type=radio]:checked + label {
+.radio-group input[type=radio]:checked + label {
 	color: #000;
 	background: #e2e1e0;
 }
 
-label + input[type=radio] + label {
+.radio-group label + input[type=radio] + label {
 	border-left: solid 1px #e2e1e0;
 }
 

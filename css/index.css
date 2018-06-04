@@ -106,6 +106,10 @@ main {
 	border-collapse: collapse;
 }
 
+#thead-overview th {
+	padding: 10px 20px 10px 20px;
+}
+
 #tbody-overview tr:hover {
 	background-color: #e2e1e0;
 	cursor: pointer;
@@ -113,7 +117,7 @@ main {
 
 #tbody-overview td {
 	border-top: 1px solid #e2e1e0;
-	padding: 3px 10px 3px 10px;
+	padding: 7px 15px 7px 15px;
 }
 
 #tbody-overview td:nth-child(1) {

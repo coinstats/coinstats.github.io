@@ -60,6 +60,7 @@ var options = {
 		enabled: true
 	},
 	
+<<<<<<< HEAD
     responsive: {
         rules: [{
             condition: {
@@ -111,6 +112,8 @@ var options = {
 			}
         }]
 	},
+=======
+>>>>>>> cc46fc9bf2e0dbc7efc263757ca13f8ffb3a248a
 	yAxis: [
 		{
 			title: {
@@ -429,7 +432,3 @@ $(function() {
 		changeLimit(this.value);
 	});
 });
-
-function isMobileDevice() {
-    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-};

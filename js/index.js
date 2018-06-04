@@ -60,7 +60,6 @@ var options = {
 		enabled: true
 	},
 	
-<<<<<<< HEAD
     responsive: {
         rules: [{
             condition: {
@@ -112,8 +111,6 @@ var options = {
 			}
         }]
 	},
-=======
->>>>>>> cc46fc9bf2e0dbc7efc263757ca13f8ffb3a248a
 	yAxis: [
 		{
 			title: {

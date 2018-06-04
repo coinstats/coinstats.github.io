@@ -60,6 +60,57 @@ var options = {
 		enabled: true
 	},
 	
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+				rangeSelector: {
+					enabled: false
+				},
+				scrollbar: {
+					enabled: false
+				},
+				navigator: {
+					enabled: false
+				},
+				yAxis: [{
+					visible: true,
+					opposite: false,
+					height: '100%',
+					title: {
+						text: ''
+					},
+				},
+				{
+					visible: true,
+					opposite: true,
+					title: {
+						text: ''
+					},
+					height: '100%',
+					top: '0%'
+				}],
+				series: [{
+					type: 'column',
+					name: 'Volume',
+					yAxis: 0,
+					dataGrouping: {
+						enabled: false
+					}
+				},
+				{
+					type: 'candlestick',
+					name: 'OHLC',
+					yAxis: 1,
+					dataGrouping: {
+						enabled: false
+					}
+				}]
+			}
+        }]
+	},
 	yAxis: [
 		{
 			title: {
@@ -378,3 +429,7 @@ $(function() {
 		changeLimit(this.value);
 	});
 });
+
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};

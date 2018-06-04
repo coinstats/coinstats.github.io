@@ -344,6 +344,10 @@ $(function() {
 	
 	loadOverview();
 	
+	$('th').click(function() {
+		sortTable(this);
+	});
+	
 	chart = new Highcharts.stockChart('chart', options);
 
 	$('input[type=radio][name=chart-zoom]').change(function () {
@@ -362,3 +366,28 @@ $(function() {
 		changeLimit(this.value);
 	});
 });
+
+
+function sortTable(th) {
+	var table = $(th).parents('table').eq(0);
+	var rows = table.find('tr:gt(0)').toArray().sort(comparer($(th).index()));
+	th.asc = !th.asc;
+	if(!this.asc) {
+		rows = rows.reverse();
+	}
+	var i = 0;
+	var length = rows.length;
+	for(i = 0; i < length; i++) {
+		table.append(rows[i]);
+	}
+}
+function comparer(index) {
+	return function(a, b) {
+		var valA = getCellValue(a, index);
+		var valB = getCellValue(b, index);
+		return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
+	}
+}
+function getCellValue(row, index) {
+	return $(row).children('td').eq(index).text();
+}

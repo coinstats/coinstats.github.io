@@ -291,21 +291,15 @@ function loadOverview() {
 		tbody.empty();
 		$.each(data, function(i, coin) {
 			tr = document.createElement('tr');
-			var attr = document.createAttribute("data-currency");
-			attr.value = i;
-			tr.setAttributeNode(attr);
-			tr.appendChild(document.createElement('td'));
-			tr.appendChild(document.createElement('td'));
-			tr.appendChild(document.createElement('td'));
-			tr.appendChild(document.createElement('td'));
-			tr.cells[0].appendChild(document.createTextNode(i));
-			tr.cells[1].appendChild(document.createTextNode(formatCurrency(coin[baseCurrency]['PRICE'])));
-			tr.cells[2].appendChild(document.createTextNode(formatCurrency(coin[baseCurrency]['MKTCAP'])));
-			tr.cells[3].appendChild(document.createTextNode(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
+			$(tr).data("currency", i);
+			$(tr).append($(document.createElement('td')).data("raw", i).text(i));
+			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['PRICE']).text(formatCurrency(coin[baseCurrency]['PRICE'])));
+			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['MKTCAP']).text(formatCurrency(coin[baseCurrency]['MKTCAP'])));
+			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
 			tbody.append(tr);
 		});
 		$("#tbody-overview tr").click(function() {
-			var c = $(this).attr("data-currency");
+			var c = $(this).data("currency");
 			changeCurrency(c);
 		});
 	});
@@ -315,8 +309,7 @@ function toggleSettings() {
 	$("#settings-container").slideToggle();
 }
 
-// helper function
-function formatCurrency(x) {
+function formatCurrency(x) { // helper function
 	if(x >= 10) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
 	else if(x > 1) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 3, maximumFractionDigits: 3}); }
 	else if(x == 1) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
@@ -371,9 +364,17 @@ $(function() {
 function sortTable(th) {
 	var table = $(th).parents('table').eq(0);
 	var rows = table.find('tr:gt(0)').toArray().sort(comparer($(th).index()));
-	th.asc = !th.asc;
-	if(!this.asc) {
+	$(th).siblings("th").removeData("sort");
+	if($(th).data("sort") === undefined) {
+		$(th).data("sort", "desc");
 		rows = rows.reverse();
+	}
+	else if($(th).data("sort") == "asc") {
+		$(th).data("sort", "desc");
+		rows = rows.reverse();
+	}
+	else if($(th).data("sort") == "desc") {
+		$(th).data("sort", "asc");
 	}
 	var i = 0;
 	var length = rows.length;
@@ -389,5 +390,5 @@ function comparer(index) {
 	}
 }
 function getCellValue(row, index) {
-	return $(row).children('td').eq(index).text();
+	return $(row).children('td').eq(index).data("raw");
 }

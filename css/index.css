@@ -84,7 +84,11 @@ main {
 	justify-content: center;
 }
 
-.box-details {
+.box-details-overview {
+	
+}
+
+.box-details-chart {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -130,13 +134,26 @@ main {
 }
 
 #details-container {
-	
+	display: none;
 }
 
 .details-container {
 	width: 96%;
 	height: 100%;
 	margin: auto;
+}
+
+#details-goback {
+	margin: 5px 10px 5px 10px;
+	cursor: pointer;
+	font-size: x-large;
+	font-weight: bold;
+}
+
+#details-currency {
+	margin: 5px 5px 5px 5px;
+	font-size: x-large;
+	font-weight: bold;
 }
 
 .chart-price {

@@ -246,6 +246,8 @@ function changeLimit(l) {
 
 function changeCurrency(c) {
 	currency = c;
+	toggleOverviewDetails();
+	$("#details-currency").text(allCurrencies[currency]['name']);
 	requestData(zoom);
 }
 
@@ -305,6 +307,12 @@ function loadOverview() {
 	});
 }
 
+function toggleOverviewDetails() {
+	loadOverview();
+	$("#overview-container").toggle();
+	$("#details-container").toggle();
+}
+
 function toggleSettings() {
 	$("#settings-container").slideToggle();
 }
@@ -339,6 +347,10 @@ $(function() {
 	
 	$('th').click(function() {
 		sortTable(this);
+	});
+	
+	$('#details-goback').click(function() {
+		toggleOverviewDetails();
 	});
 	
 	chart = new Highcharts.stockChart('chart', options);

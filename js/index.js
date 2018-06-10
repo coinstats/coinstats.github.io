@@ -222,25 +222,24 @@ function updateChartPrice() {
 function updateSelect() {
 	// basecurrency
 	$("#nav-basecurrency option[value='" + baseCurrency + "']").prop('selected', true);
-	// chart
-	$('input[type=radio][name=chart-zoom]').filter('[value=' + zoom + ']').prop('checked', true);
-	// settings
-	$('input[type=radio][name=radio-scale]').filter('[value=' + scale + ']').prop('checked', true);
-	$('input[type=radio][name=radio-limit]').filter('[value=' + limit + ']').prop('checked', true);
+	// details chart
+	$("#chart-zoom option[value='" + zoom + "']").prop('selected', true);
+	$("#chart-limit option[value='" + limit + "']").prop('selected', true);
+	$("#chart-scale option[value='" + scale + "']").prop('selected', true);
 }
 
-function changeScale(s) {
-	scale = s;
-	requestData(zoom);
-}
-
-function changeZoom(z) {
+function changeChartZoom(z) {
 	zoom = z;
 	requestData(zoom);
 }
 
-function changeLimit(l) {
+function changeChartLimit(l) {
 	limit = l;
+	requestData(zoom);
+}
+
+function changeChartScale(s) {
+	scale = s;
 	requestData(zoom);
 }
 
@@ -354,21 +353,15 @@ $(function() {
 	});
 	
 	chart = new Highcharts.stockChart('chart', options);
-
+	
+	/*
 	$('input[type=radio][name=chart-zoom]').change(function () {
 		changeZoom(this.value);
 	});
+	*/
 	
 	$('#nav-settings').click(function(e) {
 		toggleSettings();
-	});
-	
-	$('input[type=radio][name=radio-scale]').change(function () {
-		changeScale(this.value);
-	});
-	
-	$('input[type=radio][name=radio-limit]').change(function () {
-		changeLimit(this.value);
 	});
 });
 

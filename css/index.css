@@ -14,6 +14,7 @@ header {
 
 nav {
 	width: 100%;
+	padding: 0% 2% 0% 2%;
 	display: flex;
 }
 
@@ -32,24 +33,22 @@ main {
 }
 
 .container-nav-left {
-	width: 50%;
+	flex-grow: 1;
 	color: #e2e1e0;
-	font-family: 'Arial Regular';
-	font-size: 20px;
-	font-weight: bold;
-	padding: 0% 0% 0% 5%;
 	display: flex;
 	align-items: center;
 }
 
 .nav-logoname {
+	font-family: 'Arial Regular';
+	font-size: x-large;
+	font-weight: bold;
 	color: #e2e1e0;
     text-decoration: none;
 }
 
 .container-nav-right {
-	width: 50%;
-	padding: 0% 5% 0% 0%;
+	flex-grow: 1;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
@@ -59,10 +58,12 @@ main {
 	height: 60px;
 	background-color: #333;
 	color: #e2e1e0;
+	font-size: large;
+	text-align: center;
 	text-align-last: center;
 	border: 0px;
-	padding: 0px 10px;
-	margin: 0px 15px 0px 0px;
+	padding: 0px 5px;
+	margin: 0px 10px 0px 0px;
 	outline: 0 none;
 	cursor: pointer;
 }
@@ -173,6 +174,14 @@ main {
 	flex-direction: column;
 }
 
+#chart-price-close {
+	font-size: x-large;
+}
+
+#chart-price-diff {
+	font-size: small;
+}
+
 .chart-price-extrema {
 	width: 50%;
 	padding: 0px 5px 0px 0px;
@@ -181,6 +190,47 @@ main {
 	align-items: flex-end;
 }
 
+.chart-settings {
+	width: 100%;
+	display: flex;
+}
+
+.chart-zoom {
+	flex-grow: 1;
+	background-color: transparent;
+	border: 1px solid #e2e1e0; 
+	margin: 5px 5px 5px 5px;
+	padding: 3px 5px 3px 5px;
+	text-align: center;
+	text-align-last: center;
+	cursor: pointer;
+}
+
+.chart-limit {
+	flex-grow: 1;
+	background-color: transparent;
+	border: 1px solid #e2e1e0; 
+	margin: 5px 5px 5px 5px;
+	padding: 3px 5px 3px 5px;
+	text-align: center;
+	text-align-last: center;
+	cursor: pointer;
+}
+
+.chart-scale {
+	flex-grow: 1;
+	background-color: transparent;
+	border: 1px solid #e2e1e0; 
+	margin: 5px 5px 5px 5px;
+	padding: 3px 5px 3px 5px;
+	text-align: center;
+	text-align-last: center;
+	cursor: pointer;
+}
+
+
+
+/* keep this for now
 .chart-zoom {
 	padding: 0px;
 	width: 100%;
@@ -216,6 +266,7 @@ main {
 .chart-zoom li + li {
 	border-left: solid 1px #e2e1e0;
 }
+*/
 
 .chart {
 	width: 99%;
@@ -240,36 +291,6 @@ main {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-}
-
-.radio-group input[type=radio] {
-	position: absolute;
-	visibility: hidden;
-	display: none;
-}
-
-.radio-group label {
-	color: #ccc;
-	display: inline-block;
-	cursor: pointer;
-	padding: 5px 25px;
-}
-
-.radio-group input[type=radio]:checked + label {
-	color: #000;
-	background: #e2e1e0;
-}
-
-.radio-group label + input[type=radio] + label {
-	border-left: solid 1px #e2e1e0;
-}
-
-.radio-group {
-	border: solid 1px #e2e1e0;
-	margin: 5px 0px 20px 0px;
-	display: inline-block;
-	overflow: hidden;
-	box-shadow: 0px 1px 3px rgba(226,225,224,0.12), 0px 1px 2px rgba(226,225,224,0.24);
 }
 
 @media(max-width: 600px) {

@@ -56,13 +56,38 @@
 					</div>
 					<div class="chart-price-extrema">
 						<div>
-							<b>min.</b> <span id="chart-price-min"></span>
+							min. <b><span id="chart-price-min"></span></b>
 						</div>
 						<div>
-							<b>max.</b> <span id="chart-price-max"></span>
+							max. <b><span id="chart-price-max"></span></b>
 						</div>
 					</div>
 				</div>
+				<div class="chart-settings">
+					<select id="chart-zoom" class="chart-zoom" onchange="changeChartZoom(this.value)">
+						<option value="1m">1 Min</option>
+						<option value="5m">5 Min</option>
+						<option value="10m">10 Min</option>
+						<option value="1h">1 Hour</option>
+						<option value="5h">5 Hour</option>
+						<option value="10h">10 Hour</option>
+						<option value="1d">1 Day</option>
+						<option value="3d">3 Day</option>
+						<option value="1w">1 Week</option>
+					</select>
+					<select id="chart-limit" class="chart-limit" onchange="changeChartLimit(this.value)">
+						<option value="10">10 Points</option>
+						<option value="25">25 Points</option>
+						<option value="50">50 Points</option>
+						<option value="100">100 Points</option>
+						<option value="200">200 Points</option>
+					</select>
+					<select id="chart-scale" class="chart-scale" onchange="changeChartScale(this.value)">
+						<option value="linear">linear</option>
+						<option value="logarithmic">logarithmic</option>
+					</select>
+				</div>
+				<!-- keep this for now
 				<ul class="chart-zoom">
 					<li>
 						<input type="radio" name="chart-zoom" id="option-1m" value="1m"/>
@@ -101,6 +126,7 @@
 						<label for="option-1w">1w</label>
 					</li>
 				</ul>
+				-->
 				<div id="chart" class="chart"></div>
 			</div>
 		</div>
@@ -108,15 +134,6 @@
 	
 	<div id="settings-container">
 		<div class="settings-container">
-			<label>Scale</label>
-			<div class="radio-group">
-				<input type="radio" name="radio-scale" id="option-linear" value="linear"><label for="option-linear">linear</label><input type="radio" name="radio-scale" id="option-logarithmic" value="logarithmic"><label for="option-logarithmic">logarithmic</label>
-			</div>
-				
-			<label>Limit</label>
-			<div class="radio-group">
-				<input type="radio" name="radio-limit" id="option-10" value="10"/><label for="option-10">10</label><input type="radio" name="radio-limit" id="option-25" value="25"/><label for="option-25">25</label><input type="radio" name="radio-limit" id="option-50" value="50"/><label for="option-50">50</label><input type="radio" name="radio-limit" id="option-100" value="100"/><label for="option-100">100</label><input type="radio" name="radio-limit" id="option-200" value="200"/><label for="option-200">200</label>
-			</div>
 		</div>
 	</div>
 </main>

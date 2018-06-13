@@ -1,7 +1,14 @@
+html {
+	height: 100%;
+}
+
 body {
+  min-height: 100%;
 	background-color: #e2e1e0;
 	margin: 0px;
-	padding: 0px;
+	padding: 0px 0px 0px 0px;
+  display:flex; 
+  flex-direction:column; 
 }
 
 header {
@@ -306,13 +313,9 @@ main {
 }
 
 footer {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	margin-top:auto;
 	font-size: small;
 	background-color: #9b9a99;
-	margin: 15px 0px 0px 0px;
 	padding: 10px 0px 10px 10px;
 	display: flex;
 	flex-direction: column;

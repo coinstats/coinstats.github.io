@@ -1,5 +1,4 @@
 var scale = 'linear';
-var limit = 2000;
 var currency = 'BTC';
 var baseCurrency = 'USD';
 var zoom = '1m';
@@ -38,9 +37,9 @@ var options = {
 		//Should use resetZoomButton to reset zoom
 		//However, button does not show up see issue https://github.com/highcharts/highcharts/issues/8200
 		//Workaround
-		pinchType: ''
+		pinchType: '',
+        limit: 2000
 	},
-	
 	noData: {
 		style: {
 			fontWeight: 'bold',
@@ -66,7 +65,10 @@ var options = {
                 maxWidth: 500
             },
             chartOptions: {
-				rangeSelector: {
+                chart: {
+                    limit: 50
+                },
+                rangeSelector: {
 					enabled: false
 				},
 				scrollbar: {
@@ -207,15 +209,15 @@ function requestData(z) {
 	chart.showLoading();
 	zoom = z;
 	var url;
-	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(z == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
-	if(z == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
-	if(z == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(z == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
-	if(z == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
-	if(z == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(z == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=3'; }
-	if(z == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=7'; }
+	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=1'; }
+	if(z == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=5'; }
+	if(z == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=10'; }
+	if(z == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=1'; }
+	if(z == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=5'; }
+	if(z == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=10'; }
+	if(z == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=1'; }
+	if(z == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=3'; }
+	if(z == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=7'; }
 	$.getJSON(url, function(data) {
 		data = data['Data'];
 		// split the data set into ohlc and volume
@@ -293,7 +295,7 @@ function updateSelect() {
 	$('input[type=radio][name=chart-zoom]').filter('[value=' + zoom + ']').prop('checked', true);
 	// settings
 	$('input[type=radio][name=radio-scale]').filter('[value=' + scale + ']').prop('checked', true);
-	$('input[type=radio][name=radio-limit]').filter('[value=' + limit + ']').prop('checked', true);
+	$('input[type=radio][name=radio-limit]').filter('[value=' + chart.options.chart.limit + ']').prop('checked', true);
 }
 
 function changeScale(s) {

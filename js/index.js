@@ -31,7 +31,7 @@ var options = {
 		events: {
 			load:  function() {
 				chart = this;
-				requestData('1m');
+				requestData();
 			}
 		},
 		zoomType: 'xy',
@@ -104,19 +104,18 @@ var options = {
 	}
 };
 
-function requestData(z) {
+function requestData() {
 	chart.showLoading();
-	zoom = z;
 	var url;
-	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(z == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
-	if(z == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
-	if(z == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(z == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
-	if(z == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
-	if(z == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(z == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=3'; }
-	if(z == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=7'; }
+	if(zoom == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(zoom == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
+	if(zoom == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
+	if(zoom == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(zoom == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
+	if(zoom == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
+	if(zoom == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(zoom == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=3'; }
+	if(zoom == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=7'; }
 	$.getJSON(url, function(data) {
 		data = data['Data'];
 		// split the data set into ohlc and volume
@@ -198,30 +197,30 @@ function updateSelect() {
 
 function changeChartZoom(z) {
 	zoom = z;
-	requestData(zoom);
+	requestData();
 }
 
 function changeChartLimit(l) {
 	limit = l;
-	requestData(zoom);
+	requestData();
 }
 
 function changeChartScale(s) {
 	scale = s;
-	requestData(zoom);
+	requestData();
 }
 
 function changeCurrency(c) {
 	currency = c;
 	toggleOverviewDetails();
 	$("#details-currency").text(allCurrencies[currency]['name']);
-	requestData(zoom);
+	requestData();
 }
 
 function changeBaseCurrency(c) {
 	baseCurrency = c;
 	loadOverview();
-	requestData(zoom);
+	requestData();
 }
 
 function loadAllCurrencies() {
@@ -340,7 +339,7 @@ ssm.addStates([{
             if (typeof chart !== "undefined"){
                 setMobileOptions();
                 chart = new Highcharts.stockChart('chart', options);
-                requestData(zoom);
+                requestData();
             }
         }
     },
@@ -351,7 +350,7 @@ ssm.addStates([{
             if (typeof chart !== "undefined"){
                 setDesktopOptions();
                 chart = new Highcharts.stockChart('chart', options);
-                requestData(zoom);
+                requestData();
             }
      }
 }]);

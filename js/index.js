@@ -17,7 +17,12 @@ var currencies = [
 	"LTC",
 	"XMR",
 	"NMC",
-	"AEON"
+	"AEON",
+    "OMG",
+    "ICX",
+    "LINK",
+    "NEO",
+    "REQ"
 ];
 
 var baseCurrencies = [
@@ -253,7 +258,8 @@ function loadOverview() {
 	tr.cells[3].appendChild(document.createTextNode('24h-Volume (' + baseCurrency + ')'));
 	thead.append(tr);
 	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + currencies.toString() + "&tsyms=" + baseCurrency;
-	$.getJSON(url, function(data) {
+	console.log(url);
+    $.getJSON(url, function(data) {
 		data = data['RAW'];
 		var tbody = $("#tbody-overview");
 		tbody.empty();

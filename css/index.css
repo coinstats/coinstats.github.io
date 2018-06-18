@@ -150,6 +150,13 @@ main {
 	display: none;
 }
 
+.grid-container{
+	display: grid;
+	grid-template-columns: auto;
+	width: 100%;
+	margin: auto;
+}
+
 .details-container {
 	width: 96%;
 	height: 100%;

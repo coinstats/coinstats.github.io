@@ -29,7 +29,7 @@ var options = {
 	chart: {
 		events: {
 			load:  function() {
-				chart = this,
+				chart = this;
 				requestData('1m');
 			}
 		},
@@ -38,7 +38,6 @@ var options = {
 		//However, button does not show up see issue https://github.com/highcharts/highcharts/issues/8200
 		//Workaround
 		pinchType: '',
-        limit: 2000
 	},
 	noData: {
 		style: {
@@ -46,90 +45,6 @@ var options = {
 			fontSize: '15px'
 		}
 	},
-	
-	rangeSelector: {
-		enabled: true,
-	},
-	
-	scrollbar: {
-		enabled: true
-	},
-	
-	navigator: {
-		enabled: true
-	},
-	
-    responsive: {
-        rules: [{
-            condition: {
-                maxWidth: 500
-            },
-            chartOptions: {
-                chart: {
-                    limit: 50
-                },
-                rangeSelector: {
-					enabled: false
-				},
-				scrollbar: {
-					enabled: false
-				},
-				navigator: {
-					enabled: false
-				},
-				yAxis: [{
-					visible: true,
-					opposite: false,
-					height: '100%',
-					title: {
-						text: ''
-					},
-				},
-				{
-					visible: true,
-					opposite: true,
-					title: {
-						text: ''
-					},
-					height: '100%',
-					top: '0%'
-				}],
-				series: [{
-					type: 'column',
-					name: 'Volume',
-					yAxis: 0,
-					dataGrouping: {
-						enabled: false
-					}
-				},
-				{
-					type: 'candlestick',
-					name: 'OHLC',
-					yAxis: 1,
-					dataGrouping: {
-						enabled: false
-					}
-				}]
-			}
-        }]
-	},
-	yAxis: [
-		{
-			title: {
-				text: 'OHLC'
-			},
-			height: '60%',
-			lineWidth: 2,
-			offset: 20,
-		}, {
-			title: {
-				text: 'Volume'
-			},
-			top: '65%',
-			height: '35%',
-			offset: 20,
-			lineWidth: 2
-	}],
 	
 	plotOptions: {
 		series: {
@@ -178,23 +93,6 @@ var options = {
 		},
 		split: false
 	},
-	
-	series: [{
-		type: 'column',
-		name: 'Volume',
-		yAxis: 1,
-		dataGrouping: {
-			enabled: false
-		}
-	},
-	{
-		type: 'candlestick',
-		name: 'OHLC',
-		yAxis: 0,
-		dataGrouping: {
-			enabled: false
-		}
-	}],
 
 	exporting: {
 		enabled: false
@@ -413,7 +311,14 @@ $(function() {
 	
 	loadOverview();
 	
-	chart = new Highcharts.stockChart('chart', options);
+	if(ssm.isActive('mobile')){
+        setMobileOptions();
+    }else{
+        setDesktopOptions();
+    }
+
+    chart = new Highcharts.stockChart('chart', options);
+
 
 	$('input[type=radio][name=chart-zoom]').change(function () {
 		changeZoom(this.value);
@@ -431,3 +336,101 @@ $(function() {
 		changeLimit(this.value);
 	});
 });
+ssm.addStates([{
+        id: 'mobile',
+        query: '(max-width: 500px)',
+        onEnter: function(){
+            if (typeof chart !== "undefined"){
+                setMobileOptions();
+                chart = new Highcharts.stockChart('chart', options);
+                requestData(zoom);
+        
+            }
+        }
+    },
+    {
+        id: 'desktop',
+        query: '(min-width: 501px)',
+        onEnter: function(){
+            if (typeof chart !== "undefined"){
+                setDesktopOptions();
+                chart = new Highcharts.stockChart('chart', options);
+                requestData(zoom);
+            }
+     }
+}]);
+function setDesktopOptions(){
+    options.chart.limit = 2000
+    options['yAxis'] = [
+            {
+                title: {
+                    text: 'OHLC'
+                },
+                height: '60%',
+                lineWidth: 2,
+                offset: 20,
+                opposite: true
+            }, 
+            {
+                title: {
+                    text: 'Volume'
+                },
+                top: '65%',
+                height: '35%',
+                offset: 20,
+                lineWidth: 2,
+                opposite: true
+            }
+    ],
+    options['series'] = [{
+            type: 'column',
+            name: 'Volume',
+            yAxis: 1,
+            dataGrouping: {
+                enabled: false
+            }        
+        },
+        {
+            type: 'candlestick',
+            name: 'OHLC',
+            yAxis: 0,
+            dataGrouping: {
+                enabled: false
+            }
+        }
+
+    ]
+    options['rangeSelector'] = { enabled: true }
+    options['scrollbar'] = { enabled: true }
+    options['navigator'] = { enabled: true }
+ };
+
+function setMobileOptions(){
+    options.chart.limit = 50
+    options['yAxis'] = [{
+            visible: true,
+            opposite: false,
+        },
+        {
+            visible: true,
+            opposite: true,
+        }
+    ]
+    options['series'] = [{
+            type: 'column',
+            name: 'Volume',
+            yAxis: 0,
+            dataGrouping: { enabled: false }
+        },
+        {
+            type: 'candlestick',
+            name: 'OHLC',
+            yAxis: 1,
+            dataGrouping: { enabled: false },
+        }
+
+    ]
+    options['rangeSelector'] = { enabled: false }
+    options['scrollbar'] = { enabled: false }
+    options['navigator'] = { enabled: false }
+};

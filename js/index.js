@@ -1,4 +1,5 @@
 var scale = 'linear';
+var limit = 50;
 var currency = 'BTC';
 var baseCurrency = 'USD';
 var zoom = '1m';
@@ -107,15 +108,15 @@ function requestData(z) {
 	chart.showLoading();
 	zoom = z;
 	var url;
-	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=1'; }
-	if(z == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=5'; }
-	if(z == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=10'; }
-	if(z == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=1'; }
-	if(z == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=5'; }
-	if(z == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=10'; }
-	if(z == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=1'; }
-	if(z == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=3'; }
-	if(z == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (chart.options.chart.limit - 1) + '&aggregate=7'; }
+	if(z == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(z == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
+	if(z == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
+	if(z == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(z == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
+	if(z == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
+	if(z == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(z == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=3'; }
+	if(z == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=7'; }
 	$.getJSON(url, function(data) {
 		data = data['Data'];
 		// split the data set into ohlc and volume
@@ -191,7 +192,7 @@ function updateSelect() {
 	$("#nav-basecurrency option[value='" + baseCurrency + "']").prop('selected', true);
 	// details chart
 	$("#chart-zoom option[value='" + zoom + "']").prop('selected', true);
-	$("#chart-limit option[value='" + chart.options.chart.limit + "']").prop('selected', true);
+	$("#chart-limit option[value='" + limit + "']").prop('selected', true);
 	$("#chart-scale option[value='" + scale + "']").prop('selected', true);
 }
 
@@ -307,16 +308,15 @@ function formatCurrency(x) { // helper function
 }
 
 $(function() {
-	loadAllCurrencies();
-	
-	loadOverview();
-	
 	if(ssm.isActive('mobile')){
         setMobileOptions();
     }else{
         setDesktopOptions();
     }
-
+	
+	loadAllCurrencies();
+	
+	loadOverview();
 
 	$('th').click(function() {
 		sortTable(this);
@@ -328,24 +328,11 @@ $(function() {
 	
 	chart = new Highcharts.stockChart('chart', options);
 	
-	/*
-	$('input[type=radio][name=chart-zoom]').change(function () {
-		changeZoom(this.value);
-	});
-	*/
-	
 	$('#nav-settings').click(function(e) {
 		toggleSettings();
 	});
-	
-	$('input[type=radio][name=radio-scale]').change(function () {
-		changeScale(this.value);
-	});
-	
-	$('input[type=radio][name=radio-limit]').change(function () {
-		changeLimit(this.value);
-	});
 });
+
 ssm.addStates([{
         id: 'mobile',
         query: '(max-width: 500px)',
@@ -354,7 +341,6 @@ ssm.addStates([{
                 setMobileOptions();
                 chart = new Highcharts.stockChart('chart', options);
                 requestData(zoom);
-        
             }
         }
     },
@@ -369,8 +355,9 @@ ssm.addStates([{
             }
      }
 }]);
+
 function setDesktopOptions(){
-    options.chart.limit = 2000
+    limit = 500;
     options['yAxis'] = [
             {
                 title: {
@@ -391,7 +378,7 @@ function setDesktopOptions(){
                 lineWidth: 2,
                 opposite: true
             }
-    ],
+    ];
     options['series'] = [{
             type: 'column',
             name: 'Volume',
@@ -408,15 +395,14 @@ function setDesktopOptions(){
                 enabled: false
             }
         }
-
-    ]
+    ];
     options['rangeSelector'] = { enabled: true }
     options['scrollbar'] = { enabled: true }
     options['navigator'] = { enabled: true }
  };
 
 function setMobileOptions(){
-    options.chart.limit = 50
+    limit = 50;
     options['yAxis'] = [{
             visible: true,
             opposite: false,
@@ -425,7 +411,7 @@ function setMobileOptions(){
             visible: true,
             opposite: true,
         }
-    ]
+    ];
     options['series'] = [{
             type: 'column',
             name: 'Volume',
@@ -438,14 +424,11 @@ function setMobileOptions(){
             yAxis: 1,
             dataGrouping: { enabled: false },
         }
-
-    ]
+    ];
     options['rangeSelector'] = { enabled: false }
     options['scrollbar'] = { enabled: false }
     options['navigator'] = { enabled: false }
 };
-});
-
 
 function sortTable(th) {
 	var table = $(th).parents('table').eq(0);

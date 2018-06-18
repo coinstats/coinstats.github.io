@@ -189,30 +189,31 @@ function updateChartPrice() {
 function updateSelect() {
 	// basecurrency
 	$("#nav-basecurrency option[value='" + baseCurrency + "']").prop('selected', true);
-	// chart
-	$('input[type=radio][name=chart-zoom]').filter('[value=' + zoom + ']').prop('checked', true);
-	// settings
-	$('input[type=radio][name=radio-scale]').filter('[value=' + scale + ']').prop('checked', true);
-	$('input[type=radio][name=radio-limit]').filter('[value=' + chart.options.chart.limit + ']').prop('checked', true);
+	// details chart
+	$("#chart-zoom option[value='" + zoom + "']").prop('selected', true);
+	$("#chart-limit option[value='" + chart.options.chart.limit + "']").prop('selected', true);
+	$("#chart-scale option[value='" + scale + "']").prop('selected', true);
 }
 
-function changeScale(s) {
-	scale = s;
-	requestData(zoom);
-}
-
-function changeZoom(z) {
+function changeChartZoom(z) {
 	zoom = z;
 	requestData(zoom);
 }
 
-function changeLimit(l) {
+function changeChartLimit(l) {
 	limit = l;
+	requestData(zoom);
+}
+
+function changeChartScale(s) {
+	scale = s;
 	requestData(zoom);
 }
 
 function changeCurrency(c) {
 	currency = c;
+	toggleOverviewDetails();
+	$("#details-currency").text(allCurrencies[currency]['name']);
 	requestData(zoom);
 }
 
@@ -258,32 +259,31 @@ function loadOverview() {
 		tbody.empty();
 		$.each(data, function(i, coin) {
 			tr = document.createElement('tr');
-			var attr = document.createAttribute("data-currency");
-			attr.value = i;
-			tr.setAttributeNode(attr);
-			tr.appendChild(document.createElement('td'));
-			tr.appendChild(document.createElement('td'));
-			tr.appendChild(document.createElement('td'));
-			tr.appendChild(document.createElement('td'));
-			tr.cells[0].appendChild(document.createTextNode(i));
-			tr.cells[1].appendChild(document.createTextNode(formatCurrency(coin[baseCurrency]['PRICE'])));
-			tr.cells[2].appendChild(document.createTextNode(formatCurrency(coin[baseCurrency]['MKTCAP'])));
-			tr.cells[3].appendChild(document.createTextNode(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
+			$(tr).data("currency", i);
+			$(tr).append($(document.createElement('td')).data("raw", i).text(i));
+			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['PRICE']).text(formatCurrency(coin[baseCurrency]['PRICE'])));
+			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['MKTCAP']).text(formatCurrency(coin[baseCurrency]['MKTCAP'])));
+			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
 			tbody.append(tr);
 		});
 		$("#tbody-overview tr").click(function() {
-			var c = $(this).attr("data-currency");
+			var c = $(this).data("currency");
 			changeCurrency(c);
 		});
 	});
+}
+
+function toggleOverviewDetails() {
+	loadOverview();
+	$("#overview-container").toggle();
+	$("#details-container").toggle();
 }
 
 function toggleSettings() {
 	$("#settings-container").slideToggle();
 }
 
-// helper function
-function formatCurrency(x) {
+function formatCurrency(x) { // helper function
 	if(x >= 10) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
 	else if(x > 1) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 3, maximumFractionDigits: 3}); }
 	else if(x == 1) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
@@ -291,7 +291,7 @@ function formatCurrency(x) {
 	else if(x >= 0.01) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 5, maximumFractionDigits: 5}); }
 	else if(x >= 0.001) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 6, maximumFractionDigits: 6}); }
 	else if(x >= 0.0001) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 7, maximumFractionDigits: 7}); }
-	else if(x >= 0.00001) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 8, maximumFractionDigits: 8}); }
+	else if(x > 0) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 8, maximumFractionDigits: 8}); }
 	else if(x == 0) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
 	
 	else if(x <= -10) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
@@ -301,7 +301,7 @@ function formatCurrency(x) {
 	else if(x <= -0.01) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 5, maximumFractionDigits: 5}); }
 	else if(x <= -0.001) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 6, maximumFractionDigits: 6}); }
 	else if(x <= -0.0001) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 7, maximumFractionDigits: 7}); }
-	else if(x <= -0.00001) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 8, maximumFractionDigits: 8}); }
+	else if(x < -0) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 8, maximumFractionDigits: 8}); }
 
 	return x;
 }
@@ -317,12 +317,22 @@ $(function() {
         setDesktopOptions();
     }
 
-    chart = new Highcharts.stockChart('chart', options);
 
-
+	$('th').click(function() {
+		sortTable(this);
+	});
+	
+	$('#details-goback').click(function() {
+		toggleOverviewDetails();
+	});
+	
+	chart = new Highcharts.stockChart('chart', options);
+	
+	/*
 	$('input[type=radio][name=chart-zoom]').change(function () {
 		changeZoom(this.value);
 	});
+	*/
 	
 	$('#nav-settings').click(function(e) {
 		toggleSettings();
@@ -434,3 +444,37 @@ function setMobileOptions(){
     options['scrollbar'] = { enabled: false }
     options['navigator'] = { enabled: false }
 };
+});
+
+
+function sortTable(th) {
+	var table = $(th).parents('table').eq(0);
+	var rows = table.find('tr:gt(0)').toArray().sort(comparer($(th).index()));
+	$(th).siblings("th").removeData("sort");
+	if($(th).data("sort") === undefined) {
+		$(th).data("sort", "desc");
+		rows = rows.reverse();
+	}
+	else if($(th).data("sort") == "asc") {
+		$(th).data("sort", "desc");
+		rows = rows.reverse();
+	}
+	else if($(th).data("sort") == "desc") {
+		$(th).data("sort", "asc");
+	}
+	var i = 0;
+	var length = rows.length;
+	for(i = 0; i < length; i++) {
+		table.append(rows[i]);
+	}
+}
+function comparer(index) {
+	return function(a, b) {
+		var valA = getCellValue(a, index);
+		var valB = getCellValue(b, index);
+		return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
+	}
+}
+function getCellValue(row, index) {
+	return $(row).children('td').eq(index).data("raw");
+}

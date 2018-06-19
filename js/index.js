@@ -230,9 +230,9 @@ function changeBaseCurrency(c) {
 
 function loadAllCurrencies() {
 	var url = "https://min-api.cryptocompare.com/data/all/coinlist";
-	$.getJSON(url, function(data) {
-		data = data['Data'];
+	$.getJSON(url).then( function(data) { // then does not work
 		var baseUrl = data['BaseImageUrl'];
+		data = data['Data'];
 		$.each(data, function(i, coin) {
 			if(currencies.indexOf(i) != -1) {
 				allCurrencies[i] = {};
@@ -258,15 +258,14 @@ function loadOverview() {
 	tr.cells[3].appendChild(document.createTextNode('24h-Volume (' + baseCurrency + ')'));
 	thead.append(tr);
 	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + currencies.toString() + "&tsyms=" + baseCurrency;
-	console.log(url);
-    $.getJSON(url, function(data) {
+    $.getJSON(url).then( function(data) { // then does not work
 		data = data['RAW'];
 		var tbody = $("#tbody-overview");
 		tbody.empty();
 		$.each(data, function(i, coin) {
 			tr = document.createElement('tr');
 			$(tr).data("currency", i);
-			$(tr).append($(document.createElement('td')).data("raw", i).text(i));
+			$(tr).append($(document.createElement('td')).data("raw", i).html('<img class="tbody-overview-icon" src="' + allCurrencies[i]['image'] + '" width="16" height="16"> ' + i));
 			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['PRICE']).text(formatCurrency(coin[baseCurrency]['PRICE'])));
 			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['MKTCAP']).text(formatCurrency(coin[baseCurrency]['MKTCAP'])));
 			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
@@ -279,8 +278,8 @@ function loadOverview() {
 	});
 }
 
-function toggleOverviewDetails() {
-	loadOverview();
+async function toggleOverviewDetails() {
+	await loadOverview();
 	$("#overview-container").toggle();
 	$("#details-container").toggle();
 }
@@ -312,6 +311,14 @@ function formatCurrency(x) { // helper function
 	return x;
 }
 
+async function init() {
+	console.log("1");
+	await loadAllCurrencies();
+	console.log("2");
+	await loadOverview();
+	console.log("3");
+}
+
 $(function() {
 	if(ssm.isActive('mobile')){
         setMobileOptions();
@@ -319,9 +326,7 @@ $(function() {
         setDesktopOptions();
     }
 	
-	loadAllCurrencies();
-	
-	loadOverview();
+	init();
 
 	$('th').click(function() {
 		sortTable(this);

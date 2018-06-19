@@ -222,17 +222,17 @@ function changeCurrency(c) {
 	requestData();
 }
 
-function changeBaseCurrency(c) {
+async function changeBaseCurrency(c) {
 	baseCurrency = c;
-	loadOverview();
+	await loadOverview();
 	requestData();
 }
 
-function loadAllCurrencies() {
+async function loadAllCurrencies() {
 	var url = "https://min-api.cryptocompare.com/data/all/coinlist";
-	$.getJSON(url, function(data) {
-		data = data['Data'];
+	await $.getJSON(url, function(data) {
 		var baseUrl = data['BaseImageUrl'];
+		data = data['Data'];
 		$.each(data, function(i, coin) {
 			if(currencies.indexOf(i) != -1) {
 				allCurrencies[i] = {};
@@ -244,7 +244,7 @@ function loadAllCurrencies() {
 	});
 }
 
-function loadOverview() {
+async function loadOverview() {
 	var thead = $("#thead-overview");
 	thead.empty();
 	var tr = document.createElement('tr');
@@ -257,16 +257,18 @@ function loadOverview() {
 	tr.cells[2].appendChild(document.createTextNode('Marketcap (' + baseCurrency + ')'));
 	tr.cells[3].appendChild(document.createTextNode('24h-Volume (' + baseCurrency + ')'));
 	thead.append(tr);
+	$("#thead-overview th").click(function() {
+		sortTable(this);
+	});
 	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + currencies.toString() + "&tsyms=" + baseCurrency;
-	console.log(url);
-    $.getJSON(url, function(data) {
+    await $.getJSON(url, function(data) {
 		data = data['RAW'];
 		var tbody = $("#tbody-overview");
 		tbody.empty();
 		$.each(data, function(i, coin) {
 			tr = document.createElement('tr');
 			$(tr).data("currency", i);
-			$(tr).append($(document.createElement('td')).data("raw", i).text(i));
+			$(tr).append($(document.createElement('td')).data("raw", i).html('<img class="tbody-overview-icon" src="' + allCurrencies[i]['image'] + '" width="16" height="16"> ' + i));
 			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['PRICE']).text(formatCurrency(coin[baseCurrency]['PRICE'])));
 			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['MKTCAP']).text(formatCurrency(coin[baseCurrency]['MKTCAP'])));
 			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
@@ -277,10 +279,11 @@ function loadOverview() {
 			changeCurrency(c);
 		});
 	});
+	$("#thead-overview th:nth-child(3)").trigger("click");
 }
 
-function toggleOverviewDetails() {
-	loadOverview();
+async function toggleOverviewDetails() {
+	await loadOverview();
 	$("#overview-container").toggle();
 	$("#details-container").toggle();
 }
@@ -312,20 +315,16 @@ function formatCurrency(x) { // helper function
 	return x;
 }
 
-$(function() {
+$(async function() {
 	if(ssm.isActive('mobile')){
         setMobileOptions();
     }else{
         setDesktopOptions();
     }
 	
-	loadAllCurrencies();
+	await loadAllCurrencies();
 	
-	loadOverview();
-
-	$('th').click(function() {
-		sortTable(this);
-	});
+	await loadOverview();
 	
 	$('#details-goback').click(function() {
 		toggleOverviewDetails();

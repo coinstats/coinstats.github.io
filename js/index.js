@@ -229,6 +229,7 @@ function changeBaseCurrency(c) {
 }
 
 function loadAllCurrencies() {
+	console.log("loadAllCurrencies() start");
 	var url = "https://min-api.cryptocompare.com/data/all/coinlist";
 	$.getJSON(url).then( function(data) { // then does not work
 		var baseUrl = data['BaseImageUrl'];
@@ -241,10 +242,12 @@ function loadAllCurrencies() {
 				allCurrencies[i]['image'] = baseUrl + coin['ImageUrl'];
 			}
 		});
+		console.log("loadAllCurrencies() end");
 	});
 }
 
 function loadOverview() {
+	console.log("loadOverview() start");
 	var thead = $("#thead-overview");
 	thead.empty();
 	var tr = document.createElement('tr');
@@ -275,6 +278,7 @@ function loadOverview() {
 			var c = $(this).data("currency");
 			changeCurrency(c);
 		});
+		console.log("loadOverview() end");
 	});
 }
 

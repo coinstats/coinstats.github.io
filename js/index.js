@@ -248,14 +248,12 @@ async function loadOverview() {
 	var thead = $("#thead-overview");
 	thead.empty();
 	var tr = document.createElement('tr');
-	tr.appendChild(document.createElement('th'));
-	tr.appendChild(document.createElement('th'));
-	tr.appendChild(document.createElement('th'));
-	tr.appendChild(document.createElement('th'));
-	tr.cells[0].appendChild(document.createTextNode('Name'));
-	tr.cells[1].appendChild(document.createTextNode('Price (' + baseCurrency + ')'));
-	tr.cells[2].appendChild(document.createTextNode('Marketcap (' + baseCurrency + ')'));
-	tr.cells[3].appendChild(document.createTextNode('24h-Volume (' + baseCurrency + ')'));
+	$(tr).append($(document.createElement('th')).text('Name'));
+	$(tr).append($(document.createElement('th')).text('Price (' + baseCurrency + ')'));
+	$(tr).append($(document.createElement('th')).addClass('md lg xl').text('Marketcap (' + baseCurrency + ')'));
+	$(tr).append($(document.createElement('th')).addClass('sm').text('M.Cap (' + baseCurrency + ')'));
+	$(tr).append($(document.createElement('th')).addClass('md lg xl').text('Volume-24h (' + baseCurrency + ')'));
+	$(tr).append($(document.createElement('th')).addClass('sm').text('Vol.-24h (' + baseCurrency + ')'));
 	thead.append(tr);
 	$("#thead-overview th").click(function() {
 		sortTable(this);
@@ -270,8 +268,10 @@ async function loadOverview() {
 			$(tr).data("currency", i);
 			$(tr).append($(document.createElement('td')).data("raw", i).html('<img class="tbody-overview-icon" src="' + allCurrencies[i]['image'] + '" width="16" height="16"> ' + i));
 			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['PRICE']).text(formatCurrency(coin[baseCurrency]['PRICE'])));
-			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['MKTCAP']).text(formatCurrency(coin[baseCurrency]['MKTCAP'])));
-			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
+			$(tr).append($(document.createElement('td')).addClass('md lg xl').data("raw", coin[baseCurrency]['MKTCAP']).text(formatCurrency(coin[baseCurrency]['MKTCAP'])));
+			$(tr).append($(document.createElement('td')).addClass('sm').data("raw", coin[baseCurrency]['MKTCAP']).text(shortenLargeNumber(coin[baseCurrency]['MKTCAP'])));
+			$(tr).append($(document.createElement('td')).addClass('md lg xl').data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
+			$(tr).append($(document.createElement('td')).addClass('sm').data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(shortenLargeNumber(coin[baseCurrency]['TOTALVOLUME24HTO'])));
 			tbody.append(tr);
 		});
 		$("#tbody-overview tr").click(function() {
@@ -315,6 +315,18 @@ function formatCurrency(x) { // helper function
 	return x;
 }
 
+function shortenLargeNumber(x) { // helper function
+	var units = ['K', 'M', 'B', 'T', 'Q' ];
+	var decimal;
+	for(var i=units.length-1; i>=0; i--) {
+		decimal = Math.pow(1000, i+1);
+		if(x <= -decimal || x >= decimal) {
+			return +(x / decimal).toFixed(2) + units[i];
+		}
+	}
+	return x;
+}
+
 $(async function() {
 	if(ssm.isActive('mobile')){
         setMobileOptions();
@@ -344,7 +356,7 @@ ssm.addStates([{
             if (typeof chart !== "undefined"){
                 setMobileOptions();
                 chart = new Highcharts.stockChart('chart', options);
-                requestData();
+                changeChartLimit(50);
             }
         }
     },
@@ -355,49 +367,38 @@ ssm.addStates([{
             if (typeof chart !== "undefined"){
                 setDesktopOptions();
                 chart = new Highcharts.stockChart('chart', options);
-                requestData();
+                changeChartLimit(500);
             }
      }
 }]);
 
 function setDesktopOptions(){
-    limit = 500;
-    options['yAxis'] = [
-            {
-                title: {
-                    text: 'OHLC'
-                },
-                height: '60%',
-                lineWidth: 2,
-                offset: 20,
-                opposite: true
-            }, 
-            {
-                title: {
-                    text: 'Volume'
-                },
-                top: '65%',
-                height: '35%',
-                offset: 20,
-                lineWidth: 2,
-                opposite: true
-            }
+    options['yAxis'] = [{
+            visible: true,
+			height: '70%',
+            opposite: true,
+			labels: {
+				align: 'left',
+			}
+        },
+        {
+            visible: true,
+			top: '72%',
+			height: '28%',
+            opposite: true,
+        }
     ];
     options['series'] = [{
             type: 'column',
             name: 'Volume',
             yAxis: 1,
-            dataGrouping: {
-                enabled: false
-            }        
+            dataGrouping: { enabled: false }
         },
         {
             type: 'candlestick',
             name: 'OHLC',
             yAxis: 0,
-            dataGrouping: {
-                enabled: false
-            }
+            dataGrouping: { enabled: false },
         }
     ];
     options['rangeSelector'] = { enabled: true }
@@ -406,26 +407,31 @@ function setDesktopOptions(){
  };
 
 function setMobileOptions(){
-    limit = 50;
     options['yAxis'] = [{
             visible: true,
-            opposite: false,
+			height: '70%',
+            opposite: true,
+			labels: {
+				align: 'left',
+			}
         },
         {
             visible: true,
+			top: '72%',
+			height: '28%',
             opposite: true,
         }
     ];
     options['series'] = [{
             type: 'column',
             name: 'Volume',
-            yAxis: 0,
+            yAxis: 1,
             dataGrouping: { enabled: false }
         },
         {
             type: 'candlestick',
             name: 'OHLC',
-            yAxis: 1,
+            yAxis: 0,
             dataGrouping: { enabled: false },
         }
     ];

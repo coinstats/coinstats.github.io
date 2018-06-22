@@ -1,114 +1,3 @@
-var scale = 'linear';
-var limit = 50;
-var currency = 'BTC';
-var baseCurrency = 'USD';
-var zoom = '1m';
-var chart;
-var chartPriceOpen = 0;
-var chartPriceClose = 0;
-var chartPriceMin = 0;
-var chartPriceMax = 0;
-var allCurrencies = {};
-
-var currencies = [
-	"BTC",
-	"BCH",
-	"ETH",
-	"LTC",
-	"XMR",
-	"NMC",
-	"AEON",
-    "OMG",
-    "ICX",
-    "LINK",
-    "NEO",
-    "REQ"
-];
-
-var baseCurrencies = [
-	"BTC",
-	"USD",
-	"EUR"
-];
-
-var options = {
-	chart: {
-		events: {
-			load:  function() {
-				chart = this;
-				requestData();
-			}
-		},
-		zoomType: 'xy',
-		//Should use resetZoomButton to reset zoom
-		//However, button does not show up see issue https://github.com/highcharts/highcharts/issues/8200
-		//Workaround
-		pinchType: '',
-	},
-	noData: {
-		style: {
-			fontWeight: 'bold',
-			fontSize: '15px'
-		}
-	},
-	
-	plotOptions: {
-		series: {
-			softThreshold: true,
-			animation: false
-		},
-		candlestick: {
-			color: '#d82e2e',
-			lineColor: '#d82e2e',	    		
-			upLineColor: '#4dd82d',
-			upColor: '#4dd82d'
-		}
-	},
-	
-	tooltip: {
-		backgroundColor: {
-			linearGradient: {
-				x1: 0,
-				y1: 0,
-				x2: 0,
-				y2: 1
-			},
-			stops: [
-				[0, 'white'],
-				[1, '#EEE']
-			]
-		},
-		borderColor: 'gray',
-		borderWidth: 1,
-		shared: true,
-		followPointer: true,
-		formatter: function () {
-			var s;
-			s = Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', new Date(this.x)) + "<br/>";
-			s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
-			s += "<b>Open:</b> " + formatCurrency(this.points[1].point.open) + "<br/>";
-			s += "<b>High:</b> " + formatCurrency(this.points[1].point.high) + "<br/>";
-			s += "<b>Low:</b> " + formatCurrency(this.points[1].point.low) + "<br/>";
-			s += "<b>Close:</b> " + formatCurrency(this.points[1].point.close) + "<br/>";
-			s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
-			s += "<b>Change:</b> " + Number((1 - (this.points[1].point.open / this.points[1].point.close)) * 100).toFixed(2) + "%<br>";
-			s += "<b>Amplitude:</b> " + Number((1 - (this.points[1].point.low / this.points[1].point.high)) * 100).toFixed(2) + "%<br>";
-			s += "<span style='font-size:3px;color:transparent;opacity:0'>paragraph</span><br/>";
-			s += "<b>Volume:</b> " + formatCurrency(this.points[0].y) + "<br/>";
-			return s;
-		},
-		split: false
-	},
-
-	exporting: {
-		enabled: false
-	},
-
-	credits: {
-		enabled: false
-	}
-};
-
 function requestData() {
 	chart.showLoading();
 	var url;
@@ -324,11 +213,7 @@ function shortenLargeNumber(x) { // helper function
 }
 
 $(async function() {
-	if(ssm.isActive('mobile')){
-        setMobileOptions();
-    }else{
-        setDesktopOptions();
-    }
+	await loadStates();
 	
 	await loadAllCurrencies();
 	
@@ -337,100 +222,26 @@ $(async function() {
 	$('#details-goback').click(function() {
 		toggleOverviewDetails();
 	});
-	
-	chart = new Highcharts.stockChart('chart', options);
 });
 
-ssm.addStates([{
-        id: 'mobile',
-        query: '(max-width: 500px)',
-        onEnter: function(){
-            if (typeof chart !== "undefined"){
-                setMobileOptions();
-                chart = new Highcharts.stockChart('chart', options);
-                changeChartLimit(50);
-            }
-        }
-    },
-    {
-        id: 'desktop',
-        query: '(min-width: 501px)',
-        onEnter: function(){
-            if (typeof chart !== "undefined"){
-                setDesktopOptions();
-                chart = new Highcharts.stockChart('chart', options);
-                changeChartLimit(500);
-            }
-     }
-}]);
-
-function setDesktopOptions(){
-    options['yAxis'] = [{
-            visible: true,
-			height: '70%',
-            opposite: true,
-			labels: {
-				align: 'left',
+async function loadStates() {
+	ssm.addStates([{
+			id: 'mobile',
+			query: '(max-width: 500px)',
+			onEnter: function(){
+				chart = new Highcharts.stockChart('chart', chartOptionsMobile);
+				changeChartLimit(50);
 			}
-        },
-        {
-            visible: true,
-			top: '72%',
-			height: '28%',
-            opposite: true,
-        }
-    ];
-    options['series'] = [{
-            type: 'column',
-            name: 'Volume',
-            yAxis: 1,
-            dataGrouping: { enabled: false }
-        },
-        {
-            type: 'candlestick',
-            name: 'OHLC',
-            yAxis: 0,
-            dataGrouping: { enabled: false },
-        }
-    ];
-    options['rangeSelector'] = { enabled: true }
-    options['scrollbar'] = { enabled: true }
-    options['navigator'] = { enabled: true }
- };
-
-function setMobileOptions(){
-    options['yAxis'] = [{
-            visible: true,
-			height: '70%',
-            opposite: true,
-			labels: {
-				align: 'left',
-			}
-        },
-        {
-            visible: true,
-			top: '72%',
-			height: '28%',
-            opposite: true,
-        }
-    ];
-    options['series'] = [{
-            type: 'column',
-            name: 'Volume',
-            yAxis: 1,
-            dataGrouping: { enabled: false }
-        },
-        {
-            type: 'candlestick',
-            name: 'OHLC',
-            yAxis: 0,
-            dataGrouping: { enabled: false },
-        }
-    ];
-    options['rangeSelector'] = { enabled: false }
-    options['scrollbar'] = { enabled: false }
-    options['navigator'] = { enabled: false }
-};
+		},
+		{
+			id: 'desktop',
+			query: '(min-width: 501px)',
+			onEnter: function(){
+				chart = new Highcharts.stockChart('chart', chartOptionsDesktop);
+				changeChartLimit(500);
+		}
+	}]);
+}
 
 function sortTable(th) {
 	var table = $(th).parents('table').eq(0);

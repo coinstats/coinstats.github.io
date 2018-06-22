@@ -8,8 +8,8 @@ body {
 	background-color: #e2e1e0;
 	margin: 0px;
 	padding: 0px 0px 0px 0px;
-	display:flex; 
-	flex-direction:column; 
+	display: flex; 
+	flex-direction: column;
 }
 
 header {
@@ -30,6 +30,12 @@ main {
 	width: 100%;
 	height: 100%;
 	position: relative;
+}
+
+select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 .green {
@@ -63,7 +69,6 @@ main {
 }
 
 .nav-basecurrency {
-    -webkit-appearance:none;
     height: 60px;
     background-color: #333;
     color: #e2e1e0;

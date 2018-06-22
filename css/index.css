@@ -1,6 +1,10 @@
 html {
 	height: 100%;
 	font-family: monospace;
+	
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 body {
@@ -63,7 +67,6 @@ main {
 }
 
 .nav-basecurrency {
-    -webkit-appearance:none;
     height: 60px;
     background-color: #333;
     color: #e2e1e0;

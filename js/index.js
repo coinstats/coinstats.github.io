@@ -288,10 +288,6 @@ async function toggleOverviewDetails() {
 	$("#details-container").toggle();
 }
 
-function toggleSettings() {
-	$("#settings-container").slideToggle();
-}
-
 function formatCurrency(x) { // helper function
 	if(x >= 10) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
 	else if(x > 1) { x = Number(x).toLocaleString('en-US', {minimumFractionDigits: 3, maximumFractionDigits: 3}); }
@@ -343,10 +339,6 @@ $(async function() {
 	});
 	
 	chart = new Highcharts.stockChart('chart', options);
-	
-	$('#nav-settings').click(function(e) {
-		toggleSettings();
-	});
 });
 
 ssm.addStates([{

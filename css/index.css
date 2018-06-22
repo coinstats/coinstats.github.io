@@ -1,10 +1,6 @@
 html {
 	height: 100%;
 	font-family: monospace;
-	
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
 }
 
 body {
@@ -12,8 +8,12 @@ body {
 	background-color: #e2e1e0;
 	margin: 0px;
 	padding: 0px 0px 0px 0px;
-	display:flex; 
-	flex-direction:column; 
+	display: flex; 
+	flex-direction: column;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;	
 }
 
 header {

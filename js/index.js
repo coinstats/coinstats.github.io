@@ -227,17 +227,27 @@ $(async function() {
 async function loadStates() {
 	ssm.addStates([{
 			id: 'mobile',
-			query: '(max-width: 500px)',
+			query: '(max-width: 759px)',
 			onEnter: function(){
-				chart = new Highcharts.stockChart('chart', chartOptionsMobile);
+				if (typeof chart === "undefined") {
+					chart = new Highcharts.stockChart('chart', chartOptionsMobile);
+				}
+				else {
+					chart.update(chartOptionsMobile);
+				}
 				changeChartLimit(50);
 			}
 		},
 		{
 			id: 'desktop',
-			query: '(min-width: 501px)',
+			query: '(min-width: 760px)',
 			onEnter: function(){
-				chart = new Highcharts.stockChart('chart', chartOptionsDesktop);
+				if (typeof chart === "undefined") {
+					chart = new Highcharts.stockChart('chart', chartOptionsDesktop);
+				}
+				else {
+					chart.update(chartOptionsDesktop);
+				}
 				changeChartLimit(500);
 		}
 	}]);

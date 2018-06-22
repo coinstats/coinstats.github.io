@@ -33,12 +33,6 @@ var baseCurrencies = [
 	
 var chartOptions = {
 	chart: {
-		events: {
-			load:  function() {
-				chart = this;
-				requestData();
-			}
-		},
 		zoomType: 'xy',
 		//Should use resetZoomButton to reset zoom
 		//However, button does not show up see issue https://github.com/highcharts/highcharts/issues/8200

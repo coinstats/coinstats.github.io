@@ -348,7 +348,7 @@ footer {
 /* tablet */
 @media(min-width: 760px) {
 	.box {
-		padding: 2px 5px;
+		padding: 3px 7px;
 	}
 	.chart {
 		height: 500px;
@@ -368,7 +368,7 @@ footer {
 /* medium sized monitor */
 @media(min-width: 980px) {
 	.box {
-		padding: 3px 7px;
+		padding: 5px 10px;
 	}
 	.chart {
 		height: 600px;
@@ -387,6 +387,9 @@ footer {
 
 /* big sized monitor */
 @media(min-width: 1280px) {
+	.box {
+		padding: 7px 12px;
+	}
 	.chart {
 		height: 700px;
 	}

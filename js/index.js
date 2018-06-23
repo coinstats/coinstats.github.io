@@ -90,29 +90,27 @@ function updateSelect() {
 
 function changeChartZoom(z) {
 	zoom = z;
-	requestData();
+	loadDetails();
 }
 
 function changeChartLimit(l) {
 	limit = l;
-	requestData();
+	loadDetails();
 }
 
 function changeChartScale(s) {
 	scale = s;
-	requestData();
+	loadDetails();
 }
 
 function changeCurrency(c) {
 	currency = c;
-	toggleOverviewDetails();
 	$("#details-currency").text(allCurrencies[currency]['name']);
-	requestData();
+	loadDetails();
 }
 
 async function changeBaseCurrency(c) {
 	baseCurrency = c;
-	await loadOverview();
 	requestData();
 }
 
@@ -133,6 +131,11 @@ async function loadAllCurrencies() {
 }
 
 async function loadOverview() {
+	$('#menu-overview').addClass('nav-menu-active');
+	$('#menu-chart').removeClass('nav-menu-active');
+	$("#overview-container").show();
+	$("#details-container").hide();
+	
 	var thead = $("#thead-overview");
 	thead.empty();
 	var tr = document.createElement('tr');
@@ -182,10 +185,12 @@ async function loadOverview() {
 	$("#thead-overview th:nth-child(3)").trigger("click");
 }
 
-async function toggleOverviewDetails() {
-	await loadOverview();
-	$("#overview-container").toggle();
-	$("#details-container").toggle();
+function loadDetails() {
+	$('#menu-overview').removeClass('nav-menu-active');
+	$('#menu-chart').addClass('nav-menu-active');
+	$("#overview-container").hide();
+	$("#details-container").show();
+	requestData();
 }
 
 function formatCurrency(x) { // helper function
@@ -230,8 +235,12 @@ $(async function() {
 	
 	await loadOverview();
 	
-	$('#details-goback').click(function() {
-		toggleOverviewDetails();
+	$('#menu-overview').click(function() {
+		loadOverview();
+	});
+	
+	$('#menu-chart').click(function() {
+		loadDetails();
 	});
 });
 

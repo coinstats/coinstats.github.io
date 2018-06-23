@@ -63,13 +63,12 @@ function updateChartPrice() {
 	var chartPriceDiff = chartPriceClose - chartPriceOpen;
 	var chartPriceDiffPercent = (1 - (chartPriceOpen / chartPriceClose)) * 100;
 	var sign = '';
+	$("#chart-price-diff").removeClass();
 	if(chartPriceDiff > 0) {
 		sign = '+';
-		$("#chart-price-diff").removeClass();
 		$("#chart-price-diff").addClass("green");
 	}
-	else {
-		$("#chart-price-diff").removeClass();
+	if(chartPriceDiff < 0) {
 		$("#chart-price-diff").addClass("red");
 	}
 	var diff = sign + formatCurrency(chartPriceDiff) + ' (' + sign + chartPriceDiffPercent.toFixed(2) + '%)';

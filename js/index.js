@@ -1,5 +1,6 @@
-function requestData() {
+function loadDetails() {
 	chart.showLoading();
+	$("#details-currency").text(allCurrencies[currency]['name']);
 	var url;
 	if(zoom == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
 	if(zoom == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
@@ -90,30 +91,28 @@ function updateSelect() {
 
 function changeChartZoom(z) {
 	zoom = z;
-	requestData();
+	loadDetails();
 }
 
 function changeChartLimit(l) {
 	limit = l;
-	requestData();
+	loadDetails();
 }
 
 function changeChartScale(s) {
 	scale = s;
-	requestData();
+	loadDetails();
 }
 
 function changeCurrency(c) {
 	currency = c;
-	toggleOverviewDetails();
-	$("#details-currency").text(allCurrencies[currency]['name']);
-	requestData();
+	clickDetails();
 }
 
 async function changeBaseCurrency(c) {
 	baseCurrency = c;
-	await loadOverview();
-	requestData();
+	loadOverview();
+	loadDetails();
 }
 
 async function loadAllCurrencies() {
@@ -132,7 +131,7 @@ async function loadAllCurrencies() {
 	});
 }
 
-async function loadOverview() {
+function loadOverview() {
 	var thead = $("#thead-overview");
 	thead.empty();
 	var tr = document.createElement('tr');
@@ -148,7 +147,7 @@ async function loadOverview() {
 		sortTable(this);
 	});
 	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + currencies.toString() + "&tsyms=" + baseCurrency;
-    await $.getJSON(url, function(data) {
+    $.getJSON(url, function(data) {
 		data = data['RAW'];
 		var tbody = $("#tbody-overview");
 		tbody.empty();
@@ -178,14 +177,24 @@ async function loadOverview() {
 			var c = $(this).data("currency");
 			changeCurrency(c);
 		});
+		$("#thead-overview th:nth-child(3)").trigger("click");
 	});
-	$("#thead-overview th:nth-child(3)").trigger("click");
 }
 
-async function toggleOverviewDetails() {
-	await loadOverview();
-	$("#overview-container").toggle();
-	$("#details-container").toggle();
+async function clickOverview() {
+	$('#menu-overview').addClass('nav-menu-active');
+	$('#menu-chart').removeClass('nav-menu-active');
+	$("#overview-container").show();
+	$("#details-container").hide();
+	loadOverview();
+}
+
+function clickDetails() {
+	$('#menu-overview').removeClass('nav-menu-active');
+	$('#menu-chart').addClass('nav-menu-active');
+	$("#overview-container").hide();
+	$("#details-container").show();
+	loadDetails();
 }
 
 function formatCurrency(x) { // helper function
@@ -224,14 +233,18 @@ function shortenLargeNumber(x) { // helper function
 }
 
 $(async function() {
-	await loadStates();
-	
 	await loadAllCurrencies();
 	
-	await loadOverview();
+	await loadStates();
 	
-	$('#details-goback').click(function() {
-		toggleOverviewDetails();
+	clickOverview();
+	
+	$('#menu-overview').click(function() {
+		clickOverview();
+	});
+	
+	$('#menu-chart').click(function() {
+		clickDetails();
 	});
 });
 

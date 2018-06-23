@@ -143,6 +143,7 @@ async function loadOverview() {
 	$(tr).append($(document.createElement('th')).addClass('sm').text('M.Cap (' + baseCurrency + ')'));
 	$(tr).append($(document.createElement('th')).addClass('md lg xl').text('Volume-24h (' + baseCurrency + ')'));
 	$(tr).append($(document.createElement('th')).addClass('sm').text('Vol.-24h (' + baseCurrency + ')'));
+	$(tr).append($(document.createElement('th')).text('Change-24h'));
 	thead.append(tr);
 	$("#thead-overview th").click(function() {
 		sortTable(this);
@@ -161,6 +162,17 @@ async function loadOverview() {
 			$(tr).append($(document.createElement('td')).addClass('sm').data("raw", coin[baseCurrency]['MKTCAP']).text(shortenLargeNumber(coin[baseCurrency]['MKTCAP'])));
 			$(tr).append($(document.createElement('td')).addClass('md lg xl').data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
 			$(tr).append($(document.createElement('td')).addClass('sm').data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(shortenLargeNumber(coin[baseCurrency]['TOTALVOLUME24HTO'])));
+			var changepercent = coin[baseCurrency]['CHANGEPCT24HOUR'];
+			var changeClass;
+			var changeSign = '';
+			if(coin[baseCurrency]['CHANGEPCT24HOUR'] > 0) {
+				changeSign = '+';
+				changeClass = 'green';
+			}
+			if(coin[baseCurrency]['CHANGEPCT24HOUR'] < 0) {
+				changeClass = 'red';
+			}
+			$(tr).append($(document.createElement('td')).addClass(changeClass).data("raw", coin[baseCurrency]['CHANGEPCT24HOUR']).text(changeSign +  coin[baseCurrency]['CHANGEPCT24HOUR'].toFixed(2) + '%'));
 			tbody.append(tr);
 		});
 		$("#tbody-overview tr").click(function() {

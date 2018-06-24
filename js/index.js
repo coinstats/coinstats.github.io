@@ -94,7 +94,13 @@ function updateSelect() {
 		$.each(currencies[currency], function() {
 			$navBasecurrency.append($("<option />").val(this).text(this));
 		});
-		$("#nav-basecurrency option[value='" + baseCurrencyDetails + "']").prop('selected', true);
+		if(baseCurrencies.indexOf(baseCurrencyDetails) > -1 || currencies[currency].indexOf(baseCurrencyDetails) > -1) {
+			$("#nav-basecurrency option[value='" + baseCurrencyDetails + "']").prop('selected', true);
+		}
+		else {
+			changeBaseCurrency(baseCurrencyOverview);
+			
+		}
 	}
 	// details chart
 	$("#chart-zoom option[value='" + zoom + "']").prop('selected', true);

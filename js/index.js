@@ -1,16 +1,17 @@
 function loadDetails() {
 	chart.showLoading();
-	$("#details-currency").text(allCurrencies[currency]['name']);
+	updateSelect();
+	$("#details-currency").text(allCurrencies[currency]['name'] + ' (' + currency + '/' + baseCurrencyDetails + ')');
 	var url;
-	if(zoom == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(zoom == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
-	if(zoom == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
-	if(zoom == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(zoom == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=5'; }
-	if(zoom == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=10'; }
-	if(zoom == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=1'; }
-	if(zoom == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=3'; }
-	if(zoom == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrency + '&limit=' + (limit - 1) + '&aggregate=7'; }
+	if(zoom == '1m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(zoom == '5m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=5'; }
+	if(zoom == '10m') { url = 'https://min-api.cryptocompare.com/data/histominute?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=10'; }
+	if(zoom == '1h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(zoom == '5h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=5'; }
+	if(zoom == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=10'; }
+	if(zoom == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=1'; }
+	if(zoom == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=3'; }
+	if(zoom == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=7'; }
 	$.getJSON(url, function(data) {
 		data = data['Data'];
 		// split the data set into ohlc and volume
@@ -55,7 +56,6 @@ function loadDetails() {
 		chart.series[0].setData(volume, false);
 		chart.redraw();
 		updateChartPrice();
-		updateSelect();
 		chart.hideLoading();
 	});
 }
@@ -82,7 +82,26 @@ function updateChartPrice() {
 
 function updateSelect() {
 	// basecurrency
-	$("#nav-basecurrency option[value='" + baseCurrency + "']").prop('selected', true);
+	var $navBasecurrency = $("#nav-basecurrency");
+	$navBasecurrency.find('option').remove();
+	$.each(baseCurrencies, function() {
+		$navBasecurrency.append($("<option />").val(this).text(this));
+	});
+	if(menu == 'overview') {
+		$("#nav-basecurrency option[value='" + baseCurrencyOverview + "']").prop('selected', true);
+	}
+	if(menu == 'details') {
+		$.each(currencies[currency], function() {
+			$navBasecurrency.append($("<option />").val(this).text(this));
+		});
+		if(baseCurrencies.indexOf(baseCurrencyDetails) > -1 || currencies[currency].indexOf(baseCurrencyDetails) > -1) {
+			$("#nav-basecurrency option[value='" + baseCurrencyDetails + "']").prop('selected', true);
+		}
+		else {
+			changeBaseCurrency(baseCurrencyOverview);
+			
+		}
+	}
 	// details chart
 	$("#chart-zoom option[value='" + zoom + "']").prop('selected', true);
 	$("#chart-limit option[value='" + limit + "']").prop('selected', true);
@@ -110,9 +129,14 @@ function changeCurrency(c) {
 }
 
 async function changeBaseCurrency(c) {
-	baseCurrency = c;
-	loadOverview();
-	loadDetails();
+	if(menu == 'overview') {
+		baseCurrencyOverview = c;
+		loadOverview();
+	}
+	if(menu == 'details') {
+		baseCurrencyDetails = c;
+		loadDetails();
+	}
 }
 
 async function loadAllCurrencies() {
@@ -121,7 +145,7 @@ async function loadAllCurrencies() {
 		var baseUrl = data['BaseImageUrl'];
 		data = data['Data'];
 		$.each(data, function(i, coin) {
-			if(currencies.indexOf(i) != -1) {
+			if(Object.keys(currencies).indexOf(i) != -1) {
 				allCurrencies[i] = {};
 				allCurrencies[i]['symbol'] = coin['Symbol'];
 				allCurrencies[i]['name'] = coin['CoinName'];
@@ -132,21 +156,22 @@ async function loadAllCurrencies() {
 }
 
 function loadOverview() {
+	updateSelect();
 	var thead = $("#thead-overview");
 	thead.empty();
 	var tr = document.createElement('tr');
 	$(tr).append($(document.createElement('th')).text('Name'));
-	$(tr).append($(document.createElement('th')).text('Price (' + baseCurrency + ')'));
-	$(tr).append($(document.createElement('th')).addClass('md lg xl').text('Marketcap (' + baseCurrency + ')'));
-	$(tr).append($(document.createElement('th')).addClass('sm').text('M.Cap (' + baseCurrency + ')'));
-	$(tr).append($(document.createElement('th')).addClass('md lg xl').text('Volume-24h (' + baseCurrency + ')'));
-	$(tr).append($(document.createElement('th')).addClass('sm').text('Vol.-24h (' + baseCurrency + ')'));
+	$(tr).append($(document.createElement('th')).text('Price (' + baseCurrencyOverview + ')'));
+	$(tr).append($(document.createElement('th')).addClass('md lg xl').text('Marketcap (' + baseCurrencyOverview + ')'));
+	$(tr).append($(document.createElement('th')).addClass('sm').text('M.Cap (' + baseCurrencyOverview + ')'));
+	$(tr).append($(document.createElement('th')).addClass('md lg xl').text('Volume-24h (' + baseCurrencyOverview + ')'));
+	$(tr).append($(document.createElement('th')).addClass('sm').text('Vol.-24h (' + baseCurrencyOverview + ')'));
 	$(tr).append($(document.createElement('th')).text('Change-24h'));
 	thead.append(tr);
 	$("#thead-overview th").click(function() {
 		sortTable(this);
 	});
-	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + currencies.toString() + "&tsyms=" + baseCurrency;
+	var url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + Object.keys(currencies) + "&tsyms=" + baseCurrencyOverview;
     $.getJSON(url, function(data) {
 		data = data['RAW'];
 		var tbody = $("#tbody-overview");
@@ -155,22 +180,22 @@ function loadOverview() {
 			tr = document.createElement('tr');
 			$(tr).data("currency", i);
 			$(tr).append($(document.createElement('td')).data("raw", i).html('<img class="tbody-overview-icon" src="' + allCurrencies[i]['image'] + '" width="16" height="16"> ' + i));
-			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrency]['PRICE']).text(formatCurrency(coin[baseCurrency]['PRICE'])));
-			$(tr).append($(document.createElement('td')).addClass('md lg xl').data("raw", coin[baseCurrency]['MKTCAP']).text(formatCurrency(coin[baseCurrency]['MKTCAP'])));
-			$(tr).append($(document.createElement('td')).addClass('sm').data("raw", coin[baseCurrency]['MKTCAP']).text(shortenLargeNumber(coin[baseCurrency]['MKTCAP'])));
-			$(tr).append($(document.createElement('td')).addClass('md lg xl').data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrency]['TOTALVOLUME24HTO'])));
-			$(tr).append($(document.createElement('td')).addClass('sm').data("raw", coin[baseCurrency]['TOTALVOLUME24HTO']).text(shortenLargeNumber(coin[baseCurrency]['TOTALVOLUME24HTO'])));
-			var changepercent = coin[baseCurrency]['CHANGEPCT24HOUR'];
+			$(tr).append($(document.createElement('td')).data("raw", coin[baseCurrencyOverview]['PRICE']).text(formatCurrency(coin[baseCurrencyOverview]['PRICE'])));
+			$(tr).append($(document.createElement('td')).addClass('md lg xl').data("raw", coin[baseCurrencyOverview]['MKTCAP']).text(formatCurrency(coin[baseCurrencyOverview]['MKTCAP'])));
+			$(tr).append($(document.createElement('td')).addClass('sm').data("raw", coin[baseCurrencyOverview]['MKTCAP']).text(shortenLargeNumber(coin[baseCurrencyOverview]['MKTCAP'])));
+			$(tr).append($(document.createElement('td')).addClass('md lg xl').data("raw", coin[baseCurrencyOverview]['TOTALVOLUME24HTO']).text(formatCurrency(coin[baseCurrencyOverview]['TOTALVOLUME24HTO'])));
+			$(tr).append($(document.createElement('td')).addClass('sm').data("raw", coin[baseCurrencyOverview]['TOTALVOLUME24HTO']).text(shortenLargeNumber(coin[baseCurrencyOverview]['TOTALVOLUME24HTO'])));
+			var changepercent = coin[baseCurrencyOverview]['CHANGEPCT24HOUR'];
 			var changeClass;
 			var changeSign = '';
-			if(coin[baseCurrency]['CHANGEPCT24HOUR'] > 0) {
+			if(coin[baseCurrencyOverview]['CHANGEPCT24HOUR'] > 0) {
 				changeSign = '+';
 				changeClass = 'green';
 			}
-			if(coin[baseCurrency]['CHANGEPCT24HOUR'] < 0) {
+			if(coin[baseCurrencyOverview]['CHANGEPCT24HOUR'] < 0) {
 				changeClass = 'red';
 			}
-			$(tr).append($(document.createElement('td')).addClass(changeClass).data("raw", coin[baseCurrency]['CHANGEPCT24HOUR']).text(changeSign +  coin[baseCurrency]['CHANGEPCT24HOUR'].toFixed(2) + '%'));
+			$(tr).append($(document.createElement('td')).addClass(changeClass).data("raw", coin[baseCurrencyOverview]['CHANGEPCT24HOUR']).text(changeSign +  coin[baseCurrencyOverview]['CHANGEPCT24HOUR'].toFixed(2) + '%'));
 			tbody.append(tr);
 		});
 		$("#tbody-overview tr").click(function() {
@@ -182,6 +207,7 @@ function loadOverview() {
 }
 
 async function clickOverview() {
+	menu = 'overview';
 	$('#menu-overview').addClass('nav-menu-active');
 	$('#menu-chart').removeClass('nav-menu-active');
 	$("#overview-container").show();
@@ -190,6 +216,7 @@ async function clickOverview() {
 }
 
 function clickDetails() {
+	menu = 'details';
 	$('#menu-overview').removeClass('nav-menu-active');
 	$('#menu-chart').addClass('nav-menu-active');
 	$("#overview-container").hide();

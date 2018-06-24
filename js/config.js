@@ -1,7 +1,9 @@
+var menu = '';
 var scale = 'linear';
 var limit = 50;
 var currency = 'BTC';
-var baseCurrency = 'USD';
+var baseCurrencyOverview = 'USD';
+var baseCurrencyDetails = 'USD';
 var zoom = '1m';
 var chart;
 var chartPriceOpen = 0;
@@ -10,20 +12,20 @@ var chartPriceMin = 0;
 var chartPriceMax = 0;
 var allCurrencies = {};
 
-var currencies = [
-	"BTC",
-	"BCH",
-	"ETH",
-	"LTC",
-	"XMR",
-	"NMC",
-	"AEON",
-    "OMG",
-    "ICX",
-    "LINK",
-    "NEO",
-    "REQ"
-];
+var currencies = {
+	"BTC": [],
+	"BCH": [],
+	"ETH": [],
+	"LTC": ["BCH"],
+	"XMR": ["LTC"],
+	"NMC": [],
+	"AEON": ["XMR"],
+    "OMG": [],
+    "ICX": [],
+    "LINK": [],
+    "NEO": [],
+    "REQ": []
+}
 
 var baseCurrencies = [
 	"BTC",

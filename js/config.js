@@ -104,7 +104,7 @@ var chartOptions = {
 	},
 };
 
-var chartOptionsMobile = chartOptions;
+var chartOptionsMobile = Object.assign({}, chartOptions);
 chartOptionsMobile['yAxis'] = [{
         visible: true,
 		height: '70%',
@@ -137,7 +137,7 @@ chartOptionsMobile['rangeSelector'] = { enabled: false };
 chartOptionsMobile['scrollbar'] = { enabled: false };
 chartOptionsMobile['navigator'] = { enabled: false };
 
-var chartOptionsDesktop = chartOptions;	
+var chartOptionsDesktop = Object.assign({}, chartOptions);	
 chartOptionsDesktop['yAxis'] = [{
         visible: true,
 		height: '70%',

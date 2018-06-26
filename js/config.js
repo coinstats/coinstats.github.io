@@ -113,13 +113,17 @@ chartOptionsMobile['yAxis'] = [{
         opposite: true,
 		labels: {
 			align: 'left',
-		}
+		},
+		minPadding: 0,
+		maxPadding: 0
     },
     {
         visible: true,
 		top: '72%',
 		height: '28%',
         opposite: true,
+		minPadding: 0,
+		maxPadding: 0
     }
 ];
 chartOptionsMobile['series'] = [{
@@ -146,13 +150,17 @@ chartOptionsDesktop['yAxis'] = [{
         opposite: true,
 		labels: {
 			align: 'left',
-		}
+		},
+		minPadding: 0,
+		maxPadding: 0
     },
     {
         visible: true,
 		top: '72%',
 		height: '28%',
         opposite: true,
+		minPadding: 0,
+		maxPadding: 0
     }
 ];
 chartOptionsDesktop['series'] = [{

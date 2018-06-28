@@ -131,12 +131,18 @@ function changeCurrency(c) {
 async function changeBaseCurrency(c) {
 	if(menu == 'overview') {
 		baseCurrencyOverview = c;
+		changeTitle('coinstats.github.io');
 		loadOverview();
 	}
 	if(menu == 'details') {
 		baseCurrencyDetails = c;
+		changeTitle(currency + '/' + baseCurrencyDetails + ' - coinstats.github.io');
 		loadDetails();
 	}
+}
+
+function changeTitle(t) {
+	document.title = t;
 }
 
 async function loadAllCurrencies() {
@@ -212,6 +218,7 @@ async function clickOverview() {
 	$('#menu-chart').removeClass('nav-menu-active');
 	$("#overview-container").show();
 	$("#details-container").hide();
+	changeTitle('coinstats.github.io');
 	loadOverview();
 }
 
@@ -221,6 +228,7 @@ function clickDetails() {
 	$('#menu-chart').addClass('nav-menu-active');
 	$("#overview-container").hide();
 	$("#details-container").show();
+	changeTitle(currency + '/' + baseCurrencyDetails + ' - coinstats.github.io');
 	loadDetails();
 }
 

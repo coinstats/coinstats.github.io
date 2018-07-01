@@ -307,7 +307,7 @@ async function loadStates() {
 				else {
 					chart.update(chartOptionsDesktop);
 				}
-				changeChartLimit(500);
+				changeChartLimit(400);
 		}
 	}]);
 }

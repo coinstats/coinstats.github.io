@@ -264,7 +264,7 @@ function shortenLargeNumber(x) { // helper function
 			return +(x / decimal).toFixed(2) + units[i];
 		}
 	}
-	return x;
+	return x.toFixed(2);
 }
 
 $(async function() {

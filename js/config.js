@@ -1,3 +1,5 @@
+var red = '#d82e2e';
+var green = '#47cc28';
 var menu = '';
 var scale = 'linear';
 var limit = 50;
@@ -55,10 +57,10 @@ var chartOptions = {
 			animation: false
 		},
 		candlestick: {
-			color: '#d82e2e',
-			lineColor: '#d82e2e',	    		
-			upLineColor: '#4dd82d',
-			upColor: '#4dd82d'
+			color: red,
+			lineColor: red,	    		
+			upLineColor: green,
+			upColor: green
 		}
 	},
 	

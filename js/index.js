@@ -11,7 +11,8 @@ function loadDetails() {
 	if(zoom == '10h') { url = 'https://min-api.cryptocompare.com/data/histohour?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=10'; }
 	if(zoom == '1d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=1'; }
 	if(zoom == '3d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=3'; }
-	if(zoom == '1w') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=7'; }
+	if(zoom == '7d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=7'; }
+	if(zoom == '30d') { url = 'https://min-api.cryptocompare.com/data/histoday?fsym=' + currency + '&tsym=' + baseCurrencyDetails + '&limit=' + (limit - 1) + '&aggregate=30'; }
 	$.getJSON(url, function(data) {
 		data = data['Data'];
 		// split the data set into ohlc and volume

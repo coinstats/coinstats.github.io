@@ -132,7 +132,7 @@ select {
 	display: block;
 	overflow-x: auto;
 	border-collapse: collapse;
-	font-size: 1vmax;
+	font-size: 1.2vmax;
 }
 
 #thead-overview th {
